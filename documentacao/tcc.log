@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  2 SEP 2019 23:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  6 SEP 2019 14:07
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1039,7 +1039,7 @@ Package microtype Info: Loading generic settings for font family
 me identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.17 \end{resumo}
+l.14 \end{resumo}
                   [1
 
 
@@ -1052,11 +1052,11 @@ Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 113.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 113.
  ) 
 Here is how much of TeX's memory you used:
- 13577 strings out of 493089
- 202507 string characters out of 6134842
- 461423 words of memory out of 5000000
+ 13569 strings out of 493089
+ 202423 string characters out of 6134842
+ 460423 words of memory out of 5000000
  16860 multiletter control sequences out of 15000+600000
- 34278 words of font info for 47 fonts, out of 8000000 for 9000
+ 33914 words of font info for 43 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  42i,10n,36p,1013b,515s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</usr/local/
@@ -1066,7 +1066,7 @@ st/fonts/type1/public/lm/lmri12.pfb></usr/local/texlive/2015/texmf-dist/fonts/t
 ype1/public/lm/lmss12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/publi
 c/lm/lmss17.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/lm/lmssb
 x10.pfb>
-Output written on tcc.pdf (2 pages, 127481 bytes).
+Output written on tcc.pdf (2 pages, 124577 bytes).
 PDF statistics:
  47 PDF objects out of 1000 (max. 8388607)
  36 compressed objects within 1 object stream
