@@ -1,10 +1,15 @@
 allegro_game_ai/
 .DS_Store
-# *.aux
-# *.bbl
-# *.blg
-# *.brf
-# *.docx
-# *.log
-# *.synctex.gz
-# *.toc
+*.aux
+*.bbl
+*.blg
+*.brf
+*.docx
+*.log
+*.synctex.gz
+*.toc
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
