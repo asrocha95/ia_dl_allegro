@@ -13,3 +13,6 @@ allegro_game_ai/
 *.idx
 *.ilg
 *.ind
+*.lof
+*.lot
+*.loq

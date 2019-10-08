@@ -16,19 +16,19 @@
 % ---
 % Inserir a ficha bibliografica
 % ---
-%\input{conteudo/pretextual/fichacatalografica}
+% \input{conteudo/pretextual/fichacatalografica}
 % ---
 
 % ---
 % Inserir errata
 % ---
-%\input{conteudo/pretextual/errata.tex}
+% \input{conteudo/pretextual/errata.tex}
 % ---
 
 % ---
 % Inserir folha de aprovação
 % ---
-%\input{conteudo/pretextual/folhadeaprovacao}
+\input{conteudo/pretextual/folhadeaprovacao}
 % ---
 
 % ---
@@ -58,9 +58,9 @@
 %% ---
 %% inserir lista de ilustrações
 %% ---
-%\pdfbookmark[0]{\listfigurename}{lof}
-%\listoffigures*
-%\cleardoublepage
+\pdfbookmark[0]{\listfigurename}{lof}
+\listoffigures*
+\cleardoublepage
 %% ---
 %
 %% ---
@@ -82,10 +82,7 @@
 %% ---
 %% inserir lista de abreviaturas e siglas
 %% ---
-%\begin{siglas}
-%  \item[ABNT] Associação Brasileira de Normas Técnicas
-%  \item[abnTeX] ABsurdas Normas para TeX
-%\end{siglas}
+\input{conteudo/pretextual/siglas}
 %% ---
 %
 %% ---
@@ -102,6 +99,6 @@
 % ---
 % inserir o sumario
 % ---
-%\pdfbookmark[0]{\contentsname}{toc} 
-%\tableofcontents
-%\cleardoublepage
+\pdfbookmark[0]{\contentsname}{toc} 
+\tableofcontents
+\cleardoublepage
