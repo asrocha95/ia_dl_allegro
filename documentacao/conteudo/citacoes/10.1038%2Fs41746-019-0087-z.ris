@@ -1,0 +1,29 @@
+TY  - JOUR
+AU  - Yeung, Serena
+AU  - Rinaldo, Francesca
+AU  - Jopling, Jeffrey
+AU  - Liu, Bingbin
+AU  - Mehra, Rishab
+AU  - Downing, N. Lance
+AU  - Guo, Michelle
+AU  - Bianconi, Gabriel M.
+AU  - Alahi, Alexandre
+AU  - Lee, Julia
+AU  - Campbell, Brandi
+AU  - Deru, Kayla
+AU  - Beninati, William
+AU  - Fei-Fei, Li
+AU  - Milstein, Arnold
+PY  - 2019
+DA  - 2019/03/01
+TI  - A computer vision system for deep learning-based detection of patient mobilization activities in the ICU
+JO  - npj Digital Medicine
+SP  - 11
+VL  - 2
+IS  - 1
+AB  - Early and frequent patient mobilization substantially mitigates risk for post-intensive care syndrome and long-term functional impairment. We developed and tested computer vision algorithms to detect patient mobilization activities occurring in an adult ICU. Mobility activities were defined as moving the patient into and out of bed, and moving the patient into and out of a chair. A data set of privacy-safe-depth-video images was collected in the Intermountain LDS Hospital ICU, comprising 563 instances of mobility activities and 98,801 total frames of video data from seven wall-mounted depth sensors. In all, 67% of the mobility activity instances were used to train algorithms to detect mobility activity occurrence and duration, and the number of healthcare personnel involved in each activity. The remaining 33% of the mobility instances were used for algorithm evaluation. The algorithm for detecting mobility activities attained a mean specificity of 89.2% and sensitivity of 87.2% over the four activities; the algorithm for quantifying the number of personnel involved attained a mean accuracy of 68.8%.
+SN  - 2398-6352
+UR  - https://doi.org/10.1038/s41746-019-0087-z
+DO  - 10.1038/s41746-019-0087-z
+ID  - Yeung2019
+ER  - 
