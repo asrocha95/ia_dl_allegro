@@ -19,7 +19,7 @@ A maioria dos exemplos de IA sobre os quais se ouve falar hoje – de computador
 Técnicas de aprendizado de máquina e algoritmos de \textit{deep learning} têm consistentemente melhorado a capacidade de um computador de fornecer reconhecimento de padrões e previsões cada vez mais precisas. Além disso, sistemas de DL são consistentemente aplicados com sucesso a conjuntos de aplicações cada vez mais amplos.
 
 Ao mesmo tempo em que a escala e a precisão das redes profundas aumentaram, a complexidade das tarefas que podem ser resolvidas também cresceu significativamente. 
-Uma conquista importante de sistemas de DL é a sua extensão ao domínio da aprendizagem por reforço (\textit{reinforcement learning}) \cite{reinforcement-learning-intro-2018}. No contexto do aprendizado por reforço, um agente autônomo deve aprender a executar uma tarefa por tentativa e erro, sem nenhuma orientação do operador humano. 
+Uma conquista importante de sistemas de DL é a sua extensão ao domínio da aprendizagem por reforço ou \textit{reinforcement learning} (RL) \cite{reinforcement-learning-intro-2018}. No contexto do aprendizado por reforço, um agente autônomo deve aprender a executar uma tarefa por tentativa e erro, sem nenhuma orientação do operador humano. 
 
 Além do valor para pesquisa em múltiplas áreas da ciência, muitas dessas aplicações de aprendizado de máquina e \textit{deep learning} são altamente lucrativas. O aprendizado de máquina hoje é usado por muitas empresas de tecnologia, incluindo \textit{Google, Microsoft, Facebook}, IBM, \textit{Baidu, Apple, Adobe, Netflix}.
 
@@ -36,7 +36,7 @@ Nesse contexto, a modelagem de novos problemas, implementação de soluções ut
 
 
 \section{Objetivos}
- O presente trabalho tem como objetivo geral propor o desenvolvimento de uma IA capaz de aprender a jogar diferentes jogos, desde que se tenha acesso ao código fonte e feito em Allegro. Para isso, será implementado um algoritmo utilizando \textit{Deep Reinforcement Learning}, abordagem que consiste em fornecer ao sistema parâmetros relacionados ao seu estado e uma recompensa positiva ou negativa com base em suas ações. 
+ O presente trabalho tem como objetivo geral propor o desenvolvimento de uma IA capaz de aprender a jogar diferentes jogos, desde que se tenha acesso ao código fonte e feito em Allegro. Para isso, será implementado um algoritmo utilizando \textit{Deep Reinforcement Learning} (DRL), abordagem que consiste em fornecer ao sistema parâmetros relacionados ao seu estado e uma recompensa positiva ou negativa com base em suas ações. 
  Nenhuma regra sobre o jogo é dada e, inicialmente, a IA não tem informações sobre o que precisa fazer. A única informação passada para a IA são os comandos básicos do jogo. 
  O objetivo do sistema é descobrir e elaborar uma estratégia para maximizar a pontuação - ou a recompensa.
  % Diferente de muitas IAs que focam na solução de um único problema, a proposta deste projeto é elaborar uma IA que seja genérica e capaz solucionar e elaborar estratégias para uma variedade de situações diferentes.
@@ -78,42 +78,43 @@ De modo a garantir a factibilidade da implementação do sistema, algumas restri
 \begin{enumerate}
 	\item O sistema deve ter acesso ao código fonte do jogo no qual será aplicado;
 	\item O jogo deverá ter sido implementado em \textit{Allegro}\footnote{O acesso ao código fonte nos permite ter conhecimento dos comandos básicos do jogo, enquanto a biblioteca \textit{Allegro} fornece rotinas de baixo nível comumente necessárias na programação de jogos \cite{allegro}. Essas rotinas, por serem fáceis de manipular, auxiliarão na implementação de um sistema de aprendizado.};
-	\item O jogo deve ser 2D para garantir a viabilidade do sistema;
+	\item O jogo deve ser 2D para garantir a viabilidade do sistema.
 \end{enumerate}
 
-
-
-
-
-
-
-
-
+O desafio nesse projeto é criar e treinar uma rede neural convolucional capaz de aprender políticas através de pixels brutos em ambientes complexos por meio de um algoritmo de \textit{deep reinforcement learning}. O objetivo principal é implementar um agente que seja capaz de aprender a jogar o maior número de jogos possíveis sem conhecimento prévio do ambiente. Em outras palavras, o sistema deverá ser genérico e o agente não receberá nenhuma informação prévia sobre um jogo específico.
 % subsection aplicação_de_drl_no_treinamento_de_uma_ia_para_aprender_a_jogar_jogos_em_allegro (end)
 
-\section{Revisão da literatura }
+\section{Revisão da literatura}
 
 Apesar de se falar sobre \textit{deep learning} como uma emocionante nova tecnologia, este tem uma história longa e rica, mas apresentando diversos nomes, os quais refletem diferentes pontos de vista filosóficos. Em termos gerais, ocorreram três ondas de desenvolvimento com níveis de popularidade variados: DL conhecido como \textit{cybernetics} nas décadas de 1940 a 1960, DL conhecido como \textit{connectionism} entre as décadas de 1980 e 1990 e o ressurgimento atual sob o nome de aprendizado profundo ou \textit{deep learning} a partir de 2006 \cite{Goodfellow-et-al-2016}.
 
 Alguns dos primeiros algoritmos de aprendizado que são reconhecidos hoje pretendiam ser modelos computacionais de aprendizado biológico, isto é, modelos de como o aprendizado acontece ou pode acontecer no cérebro. Como resultado, um dos nomes que o DL passou é o de \textit{artificial neural networks} (ANNs). No entanto, o termo moderno "\textit{deep learning}" vai além da perspectiva neurocientífica da atual geração de modelos de aprendizado de máquina. Ele apela a um princípio mais geral de aprendizado de vários níveis de composição, que podem ser aplicados em estruturas de aprendizado de máquina que não são necessariamente inspiradas em neurônios.
 
 
+Uma das muitas contribuições do DL está no reconhecimento de fala \cite{nassif:speech-rec:2019}. Até recentemente, os de reconhecimento automático de fala (ASR) combinavam principalmente modelos ocultos de Markov (HMMs) e modelos de mistura gaussianos (GMM). Com a introdução de redes neurais e, posteriormente, modelos de DL cada vez maiores e mais profundos e conjuntos de dados muito maiores, a precisão do reconhecimento foi dramaticamente aprimorada usando redes neurais para, eventualmente, substituir GMMs na tarefa de associar recursos acústicos a fonemas \cite{Goodfellow-et-al-2016}.
 
 
+O \textit{deep learning} também contribuiu para outras ciências. As redes convolucionais modernas para reconhecimento de objetos e visão computacional fornecem um modelo de processamento visual com diversas aplicações na medicina \cite{Yeung:comp-vis:2019,dicarlo-afrax-yamins:2014}. O \textit{deep learning} também fornece ferramentas úteis para processar grandes quantidades de dados e fazer previsões úteis em campos científicos. Ele tem sido usado com sucesso para prever como as moléculas irão interagir, a fim de ajudar as empresas farmacêuticas a projetar novos medicamentos \cite{dahl2014multitask}, a procurar partículas subatômicas \cite{baldi:s:w:2015}, e para o processamento de linguagem natural \cite{Young_2018}. Espera-se que o DL apareça em cada vez mais campos científicos no futuro.
+
+Pesquisas recentes em IA deram origem a técnicas poderosas para o \textit{deep reinforcement learning}. 
+Na combinação de aprendizado de representação com comportamento orientado por recompensas, o DRL parece ter um interesse inerente à psicologia e neurociência. 
+Um argumento contra essa abordagem foi o de que os procedimentos de aprendizado por DRL exigem grandes quantidades de dados de treinamento, sugerindo que esses algoritmos podem diferir fundamentalmente daqueles subjacentes ao aprendizado humano. 
+Embora essa preocupação se aplique à onda inicial de técnicas de RL profunda, o trabalho subsequente de IA estabeleceu métodos que permitem que os sistemas de RL profunda aprendam mais rápida e eficientemente \cite{Botvinick:rl-fastandslow:2019}.
+
+A IA em videogames possui algumas peculiaridades \cite{Yannakakis:2012:GAR:2212908.2212954, Millington:2009:AIG:1795711}, que a distinguem da IA clássica, especialmente porque, em muitos casos, ela deve lidar com aplicativos em tempo real e não necessariamente precisa otimizar resultados. Ela pode ser explorada para muitos propósitos, que podem ser coletados em três macro-categorias principais: ajudar na jogabilidade, melhorar a imersão do jogador no mundo do jogo (também simular a psicologia dos agentes que representam os personagens que não jogam - NPCs) e apoiar o trabalho de designers de jogos e níveis \cite{Piergigli:drl:2019}. 
+Entre as técnicas de IA mais difusas, podemos contar aquelas usadas para gerar procedimentalmente conteúdos \cite{Karavolos:automated-level-design:2018,Ripamonti2017} e aquelas destinadas a apoiar o sistema de tomada de decisão dos agentes artificiais \cite{Ripamonti:Believable-group-behaviours:2017}.
+
+O aprendizado de máquina e as redes neurais são aplicadas aos jogos há muito tempo, mas seu uso recentemente conheceu um interesse renovado e aborda uma ampla variedade de tópicos.
+No entanto, o uso dessas técnicas para treinar agentes em ambientes complexos, com várias ações simultâneas possíveis é um resultado bastante desafiador a ser alcançado \cite{Piergigli:drl:2019}.
+
+Recentemente, o \textit{DeepMind} do Google desenvolveu o \textit{Deep Q-network} (DQN), uma arquitetura de rede neural, que demonstrou ser capaz de aprender políticas de controle no nível humano em vários jogos diferentes do Atari 2600 \cite{mnih-human-control-drl}. Os DQNs aprendem a estimar os valores Q (função de valor da ação do estado) de selecionar cada ação do estado atual do jogo. Como a função de valor da ação do estado é uma representação suficiente da política do agente, um jogo pode ser jogado selecionando a ação com o valor Q máximo em cada etapa do tempo. Dessa forma, aprendendo políticas de pixels em tela bruta a ações, essas redes têm demonstrado desempenho avançado em vários jogos do Atari 2600. Vale ressaltar que a mesma rede pode ser usada em várias tarefas sem nenhuma alteração e que o aprendizado é de ponta a ponta, dos valores brutos dos pixels aos valores Q, sem a necessidade de intervenção humana. Recentemente, DQNs foram estendidos para obter melhor desempenho em jogos ainda mais complexos \cite{Debidatta:playing-games-drl:2016}.
 
 
-
-Uma das muitas contribuições do DL está no reconhecimento de fala. Depois de melhorar ao longo dos anos 90, as taxas de erro para reconhecimento de fala estagnaram a partir de 2000. A introdução do \textit{deep learning} (Dahl et al., 2010; Denget al., 2010b; Seide et al., 2011; Hinton et al., 2012a) para o reconhecimento de fala resultou em uma queda repentina nas taxas de erro, com algumas taxas de erro cortadas pela metade. Exploramos essa história em mais detalhes na seção 12.3
-
-
-O \textit{deep learning} também contribuiu para outras ciências. As redes convolucionais modernas para reconhecimento de objetos fornecem um modelo de processamento visual que os neurocientistas podem estudar \cite{dicarlo-afrax-yamins:2014}. O \textit{deep learning} também fornece ferramentas úteis para processar grandes quantidades de dados e fazer previsões úteis em campos científicos. Ele tem sido usado com sucesso para prever como as moléculas irão interagir, a fim de ajudar as empresas farmacêuticas a projetar novos medicamentos \cite{dahl2014multitask}, a procurar partículas subatômicas \cite{baldi:s:w:2015}. Espera-se que o DL apareça em cada vez mais campos científicos no futuro.
-
-% No contexto de \textit{reinforcement learning}, o \textit{DeepMind} demonstrou que um aprendizado por reforço, baseado no aprendizado profundo, é capaz de aprender a jogar videogames Atari, atingindo desempenho em nível humano em diversas tarefas \cite{mnih-human-control-drl}.
 
 
 \section{Organização do trabalho} % (fold)
 \label{sec:organização_do_trabalho}
-Este trabalho está estruturado em cinco capítulos. O \textbf{Capítulo \ref{chap:intro}} consiste em uma breve introdução ao tema do projeto e uma análise da literatura do problema. O \textbf{Capítulo 2} apresenta uma contextualização do problema nos âmbitos social, ambiental e econômico. O \textbf{Capítulo \ref{chap:abordagem}} discorre a abordagem proposta para o problema. O \textbf{Capítulo 4} encerra o trabalho com as conclusões. E por fim, o \textbf{Capítulo 5} apresenta as propostas de continuidade para o Trabalho de Conclusão de Curso II.
+Este trabalho está estruturado em cinco capítulos. O \textbf{Capítulo \ref{chap:intro}} consiste em uma breve introdução ao tema do projeto e uma análise da literatura do problema. O \textbf{Capítulo \ref{chap:ctx-hum}} apresenta uma contextualização do problema nos âmbitos social, ambiental e econômico. O \textbf{Capítulo \ref{chap:abordagem}} discorre a abordagem proposta para o problema, assim como sua respectiva modelagem matemática. O \textbf{Capítulo 4} encerra o trabalho com as conclusões. E por fim, o \textbf{Capítulo 5} apresenta as propostas de continuidade para o Trabalho de Conclusão de Curso II.
 
 % section organização_do_trabalho (end)
 
