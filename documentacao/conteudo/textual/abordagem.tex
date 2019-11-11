@@ -6,14 +6,15 @@
 % ----------------------------------------------------------
 
 
-No contexto de jogos digitais, treinar um agente para superar os jogadores humanos e otimizar sua pontuação pode nos ensinar como otimizar processos diferentes em uma variedade de subcampos diferentes e intrigantes \cite{comi:teach:AI:DRL:2018}. Uma solução proposta na literatura, obtendo ótimos resultados, e que tem como objetivo treinar um computador pra aprender e desenvolver estratégias para jogar diferentes jogos, é o \textit{deep reinforcement learning} (DRL). 
+No contexto de jogos digitais, treinar um agente para superar os jogadores humanos e otimizar sua pontuação pode nos ensinar como otimizar processos diferentes em uma variedade de subcampos intrigantes \cite{comi:teach:AI:DRL:2018}. Uma solução proposta na literatura, obtendo ótimos resultados, e que tem como objetivo treinar um computador pra aprender e desenvolver estratégias para jogar diferentes jogos, é o \textit{deep reinforcement learning} (DRL). 
 
-No presente trabalho é proposto a implementação de uma inteligência artificial que, utilizando um algoritmo de \textit{deep reinforcement learning}, seja capaz de aprender a jogar diferentes jogos e desenvolver estratégias para maximizar sua pontuação. O DRL é uma abordagem do \textit{deep learning} que, em contraste à abordagens mais comuns como o aprendizado supervisionado e não supervisionado, utiliza as técnicas de aprendizagem por reforço para treinar o agente.
+No presente trabalho é proposto a implementação de uma inteligência artificial que, utilizando um algoritmo de \textit{deep reinforcement learning}, seja capaz de aprender a jogar diferentes jogos e desenvolver estratégias para maximizar sua pontuação.
 
 Diante das peculiaridades e restrições do problema discutidos em \textbf{\ref{sec:descricao_do_problema}}, a biblioteca \textit{Allegro} foi escolhida como a base para a implementação dos jogos que serão apresentados ao sistema.
 O \textit{Allegro} é uma biblioteca multiplataforma destinada principalmente a jogos de vídeo e programação multimídia. A biblioteca fornece rotinas de baixo nível comumente necessárias na programação de jogos, como a criação de janelas, aceitação de entrada do usuário, carregamento de dados, desenho de imagens, reprodução de sons etc \cite{allegro}.
 
-Por fim, para auxiliar a implementação do sistema, será utilizado uma ferramenta para desenvolvimento de inteligência artificial em jogos implementados em \textit{Allegro} \cite{silva:amb-jd-allegro}, que oferece um ambiente facilitador ao estudo de soluções de IA aplicada em jogos. Essa ferramenta fornece funcionalidades como a exportação dos comandos básicos de um jogo, que precisam ser passados para o agente para que o mesmo tenha conhecimento dos limites físicos do ambiente no qual está inserido. Essa ferramenta permite que o pesquisador não fique limitado a um jogo existente, mas possa usar qualquer jogo que ele tenha acesso ao código fonte e feito em \textit{Allegro}.
+Por fim, para auxiliar a implementação do sistema, será utilizado um \textit{Allegro Learning Enviroment}, uma ferramenta para o desenvolvimento de inteligência artificial em jogos implementados em \textit{Allegro}. Seu objetivo é oferecer uma plataforma que facilite o desenvolvimento de algoritmos de ML para jogos em \textit{Allegro}.
+
 
 
 % section contextualização (end)
@@ -25,19 +26,20 @@ Por fim, para auxiliar a implementação do sistema, será utilizado uma ferrame
 
 
  A \textbf{Figura \ref{hierarquia-conceitos-dl}} mostra como um sitema de \textit{deep learning} representa o conceito de imagem de uma pessoa combinando conceitos mais simples, como cantos e contornos, que por sua vez são definidos em termos de arestas. 
- O mapeamento de funções de um conjunto de pixels para uma identidade de objeto é muito complicado. O algoritmo de \textit{deep learning} resolve essa dificuldade dividindo o mapeamento complicado desejado em séries de mapeamentos simples aninhados, cada um deles descrito por uma camada diferente do modelo. A entrada é apresentada na camada visível, assim denominada porque contém as variáveis que podemos observar.
- Em seguida, uma série de camadas ocultas extrai recursos cada vez mais abstratos da imagem. Essas camadas são chamadas de "ocultas" porque seus valores não são fornecidos nos dados; em vez disso, o algoritmo deve determinar quais conceitos são úteis para explicar os relacionamentos nos dados observados. A camada de saída obtém a identidade de objeto abstrata a partir dos conceitos obtidos pelas camadas ocultas.
+
+ O mapeamento de funções de um conjunto de pixels para uma identidade de objeto é uma tarefa complicada. O algoritmo de \textit{deep learning} resolve essa dificuldade dividindo o mapeamento complicado desejado em séries de mapeamentos simples aninhados, cada um deles descrito por uma camada diferente do modelo. A entrada é apresentada na camada visível,
+ em seguida, uma série de camadas ocultas extrai recursos cada vez mais abstratos da imagem. A camada de saída obtém a identidade de objeto abstrata a partir dos conceitos obtidos pelas camadas ocultas.
 
 
  \begin{figure}[h]
  \centering
  \includegraphics[width=.5 \textwidth]{conteudo/imgs/hierarquia-conceitos-dl.png}
- \caption[Ilustração de um modelo de aprendizado profundo]{Ilustração de um modelo de aprendizado profundo. Dados os pixels, a primeira camada pode identificar facilmente as bordas, comparando o brilho dos pixels vizinhos. Dada a descrição das arestas pela primeira camada oculta, a segunda camada oculta pode procurar facilmente cantos e contornos estendidos, reconhecíveis como coleções de arestas. Dada a descrição da segunda camada oculta da imagem em termos de cantos e contornos, o terceiro setor oculto pode detectar partes inteiras de objetos específicos, encontrando coleções específicas de contornos e cantos. Finalmente, esta descrição da imagem em termos das partes do objeto que ela contém pode ser usada para reconhecer os objetos presentes na imagem. Imagem retirada de \cite{Goodfellow-et-al-2016}}
+ \caption[Ilustração de um modelo de aprendizado profundo]{Ilustração de um modelo de aprendizado profundo. Cada camada é capaz de identificar dados de complexidade crescente a partir dos pixels pasados para a camada de entrada. Imagem retirada de \cite{Goodfellow-et-al-2016}}
  \label{hierarquia-conceitos-dl}
  \end{figure}
+ % \clearpage
 
-
-\section{\textit{Reinforcement Learning}} % (fold)
+ \section{\textit{Reinforcement Learning}} % (fold)
  \label{sec:reinforcement_learning}
 
  O aprendizado por reforço ou \textit{reinforcement learning} (RL) é uma abordagem computacional para entender e automatizar o aprendizado direcionado a objetivos e a tomada de decisões. O aprendizado por reforço distingue-se de outras abordagens computacionais por sua ênfase na aprendizagem de um agente apartir da interação direta com seu ambiente, sem exigir supervisão exemplar ou modelos completos do ambiente \cite{reinforcement-learning-intro-2018}.
@@ -87,22 +89,36 @@ Por fim, para auxiliar a implementação do sistema, será utilizado uma ferrame
  \end{figure}
 
  As escolhas de ação são feitas com base em julgamentos de valor.
- Buscamos ações que gerem estados de maior valor, e não de maior recompensa, porque essas ações obtêm a maior quantidade de recompensa para nós a longo prazo. 
- Infelizmente, é muito mais difícil determinar valores do que determinar recompensas. As recompensas são basicamente dadas diretamente pelo ambiente, mas os valores devem ser estimados e re-estimados a partir das sequências de observações que um agente faz ao longo de toda a sua vida útil.
+ Buscamos ações que gerem estados de maior valor, e não de maior recompensa, porque essas ações obtêm a maior quantidade de recompensa a longo prazo. 
+ % Infelizmente, é muito mais difícil determinar valores do que determinar recompensas. 
+ As recompensas são basicamente dadas diretamente pelo ambiente, mas os valores devem ser estimados e re-estimados a partir das sequências de observações que um agente faz ao longo de toda a sua vida útil.
 
- % subsection reinforcement_learning (end)
-
-\section{Aplicação de DRL no treinamento de uma IA para aprender a jogar jogos em \textit{Allegro}} % (fold)
- \label{sec:aplicação_de_drl_no_treinamento_de_uma_ia_para_aprender_a_jogar_jogos_em_allegro}
 
  O \textit{deep reinforcement learning} (DRL) é uma abordagem do \textit{deep learning} que, em contraste a abordagens mais tradicionais como o aprendizado supervisionado e não supervisionado, utiliza as técnicas de aprendizagem por reforço para treinar o agente. Essa abordagem consiste em fornecer ao sistema parâmetros relacionados ao seu estado e uma recompensa positiva ou negativa com base em suas ações. Nenhuma regra sobre o jogo é dada e, inicialmente, o agente não tem nenhuma informação sobre o que precisa fazer. O objetivo do sistema é descobrir e elaborar uma estratégia para maximizar sua pontuação - ou recompensa.
 
 
- [TODO]
+
+\section{Aplicação de DRL em um \textit{Allegro Learning Enviroment}} % (fold)
+ \label{sec:allegro_learning_enviroment}
+
+ O \textit{Arcade Learning Enviroment} é uma ferramenta de software que oferece uma interface para interagir com ambientes de jogos Atari 2600 emulados. Seu objetivo é oferecer uma plataforma que facilite o desenvolvimento de agentes de aprendizado para aprender a jogar jogos Atari. Essa ferramenta também fornece uma camada de manipulação de jogos que
+ transforma cada jogo em um problema padrão de aprendizado por reforço, identificando a pontuação acumulada e se o jogo terminou. \cite{arcade-learning-enviroment}
+
+ Inspirado na plataforma descrita acima, este trabalho visa a utilização de um \textit{Allegro Learning Enviroment}, que funcionaria de forma semelhante ao \textit{Arcade Learning Enviroment}, com a distinção de que o primeiro seria uma plataforma voltada para jogos implementados em \textit{Allegro}. O \textit{Allegro Learning Enviroment} (ALE) terá como base a ferramenta implementada por \cite{silva:amb-jd-allegro}, que oferece um ambiente facilitador ao estudo de soluções de IA aplicada em jogos. Essa ferramenta fornece funcionalidades como a exportação dos comandos básicos de um jogo, que precisam ser passados para o agente para que o mesmo tenha conhecimento dos limites físicos do ambiente no qual está inserido. Isso permite que o pesquisador não fique limitado a um jogo existente, mas possa usar qualquer jogo que ele tenha acesso ao código fonte e feito em \textit{Allegro}.
+
+ Para o treinamento do agente, serão utilizados capturas da tela em cada estado do jogo, obtidas pelo ALE. A partir dessas imagens serão extraídas  as informações do estado atual do jogo (posição do jogador, obstáculos, etc), de forma a determinar qual a melhor ação do agente para a situação na qual ele se encontra. A utilização de capturas de tela como entradas para o agente permite que a IA seja treinada para situações em que hajam obstáculos gerados de forma aleatória. A partir dessas imagens, o agente deverá ser capaz de identificar tais obstáculos, sua localização e a melhor maneira de lidar com os mesmos.
+
+ Em relação aos jogos nos quais o agente será treinado, a proposta é de se utilizar diferentes jogos de diferentes complexidades para avaliar o potencial do sistema. Os jogos serão obtidos de fontes de código aberto disponíveis \textit{online} ou, caso seja necessário, serão implementados com os requisitos necessário para o projeto.
 
 
- \section{Modelagem matemática} % (fold)
- \label{sec:modelagem_matemática}
+
+ 
+
+ % [TODO]
+
+
+ % \section{Modelagem matemática} % (fold)
+ % \label{sec:modelagem_matemática}
  
  % section modelagem_matemática (end)
 
