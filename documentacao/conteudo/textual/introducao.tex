@@ -5,7 +5,7 @@
 \label{chap:intro}
 % ----------------------------------------------------------
 
-A inteligência artificial (IA) vem ganhando manchetes no mundo todo, sendo anunciada tanto como uma salvação econômica quanto como precursora de desintegração social. Quando computadores programáveis foram concebidos pela primeira vez, as pessoas se perguntavam se essas máquinas poderiam se tornar inteligentes, mais de cem anos antes de uma ser construída %.
+A inteligência artificial (IA) vem ganhando manchetes no mundo todo, sendo anunciada tanto como uma salvação econômica quanto como precursora de desintegração social \cite{robu-valentin-flyn:ethical-social-challenges-ai}. Quando computadores programáveis foram concebidos pela primeira vez, as pessoas se perguntavam se essas máquinas poderiam se tornar inteligentes, mais de cem anos antes de uma ser construída %.
 \cite{menabrea1843sketch}.
  Hoje, a inteligência artificial é um campo com inúmeras aplicações práticas e tópicos de pesquisa ativos. Buscamos softwares inteligentes para automatizar o trabalho de rotina, entender a fala ou as imagens, fazer diagnósticos em medicina e apoiar a pesquisa científica \cite{Goodfellow-et-al-2016}.
 
@@ -16,7 +16,7 @@ A maioria dos exemplos de IA sobre os quais se ouve falar hoje – de computador
 
 \section{Motivação}
 
-Técnicas de aprendizado de máquina e algoritmos de \textit{deep learning} têm consistentemente melhorado a capacidade de um computador de fornecer reconhecimento de padrões e previsões cada vez mais precisas. Além disso, sistemas de DL são consistentemente aplicados com sucesso a conjuntos de aplicações cada vez mais amplos.
+Técnicas de aprendizado de máquina e algoritmos de \textit{deep learning} (DL) têm consistentemente melhorado a capacidade de um computador de fornecer reconhecimento de padrões e previsões cada vez mais precisas. Além disso, sistemas de DL são consistentemente aplicados com sucesso a conjuntos de aplicações cada vez mais amplos.
 
 Ao mesmo tempo em que a escala e a precisão das redes neurais aumentaram, a complexidade das tarefas que podem ser resolvidas também cresceu significativamente. 
 Uma conquista importante de sistemas de DL é a sua extensão ao domínio da aprendizagem por reforço ou \textit{reinforcement learning} (RL) \cite{reinforcement-learning-intro-2018}. No contexto do aprendizado por reforço, um agente autônomo deve aprender a executar uma tarefa por tentativa e erro, sem nenhuma orientação do operador humano. 
@@ -39,6 +39,7 @@ Nesse contexto, a modelagem de novos problemas, implementação de soluções ut
  O presente trabalho tem como objetivo geral propor o desenvolvimento de uma IA capaz de aprender a jogar diferentes jogos, desde que se tenha acesso ao código fonte e feito em Allegro. Para isso, será implementado um algoritmo utilizando \textit{Deep Reinforcement Learning} (DRL), abordagem que consiste em fornecer ao sistema parâmetros relacionados ao seu estado e uma recompensa positiva ou negativa com base em suas ações. 
  Nenhuma regra sobre o jogo é dada e, inicialmente, a IA não tem informações sobre o que precisa fazer. A única informação passada para a IA são os comandos básicos do jogo. 
  O objetivo do sistema é descobrir e elaborar uma estratégia para maximizar a pontuação - ou a recompensa.
+
  % Diferente de muitas IAs que focam na solução de um único problema, a proposta deste projeto é elaborar uma IA que seja genérica e capaz solucionar e elaborar estratégias para uma variedade de situações diferentes.
 
  Os objetivos mais específicos deste trabalho são:
@@ -46,9 +47,12 @@ Nesse contexto, a modelagem de novos problemas, implementação de soluções ut
  	\item Revisão da literatura do problema;
  	\item Descrição e modelagem do problema;
  	\item Proposta de critérios adicionais que possibilitem estimar outras características das possíveis soluções do projeto, tais como performance, confiabilidade, entre outras;
- 	\item Proposta de um algoritmo de \textit{deep learning} para a solução do problema;
- 	\item Análise dos resultados obtidos em comparação com diferentes soluções implementadas por outras entidades e utilizadas na prática por empresas atuando no mercado.
+ 	\item Modelagem de um ou mais jogos que atendam aos requisitos, para validação do sistema;
+ 	\item Proposta de um algoritmo de \textit{deep learning} para a solução do problema.
+ 	% \item Análise dos resultados obtidos em comparação com diferentes soluções implementadas por outras entidades e utilizadas na prática por empresas atuando no mercado.
  \end{enumerate}
+
+ Vale apena ressaltar que a ideia de se implementar um sistema que possa ser adaptado para uma grande variedade de cenários ou jogos, sugere uma ferramenta que possa ser aplicada não só na indústria de videogames, mas em diversas áreas da ciência. Uma situação ou problema do mundo real poderia, por exemplo, ser modelada na forma de um jogo. Nesse caso, a ferramenta utilizada poderia ser aplicada para maximizar sua pontuação. Essa pontuação, por sua vez, seria modelada dentro do jogo de forma a se aproximar do resultado ideal. Dessa forma, o sistema seria capaz de desenvolver estratégias para solucionar problemas e qualquer área da ciência.
 
  Perante o exposto, a implementação de algoritmos que utilizam o aprendizado de máquina de forma a serem aplicados em diferentes cenários,
  apresenta um potencial de propor novas estratégias e otimizar sistemas já existentes, melhorar a qualidade do produto final e a experiência do usuário, além de proporcionar uma vantagem competitiva no mercado.
@@ -79,9 +83,12 @@ De modo a garantir a factibilidade da implementação do sistema, algumas restri
 
 \begin{enumerate}
 	\item O sistema deve ter acesso ao código fonte do jogo no qual será aplicado;
-	\item O jogo deverá ter sido implementado em \textit{Allegro}\footnote{O acesso ao código fonte nos permite ter conhecimento dos comandos básicos do jogo, enquanto a biblioteca \textit{Allegro} fornece rotinas de baixo nível comumente necessárias na programação de jogos \cite{allegro}. Essas rotinas, por serem fáceis de manipular, auxiliarão na implementação de um sistema de aprendizado.};
+	\item O sistema deverá ter acesso à pontuação do jogo;
+	\item O jogo deverá ter sido implementado em \textit{Allegro};
 	\item O jogo deve ser 2D para garantir a viabilidade da implementação do sistema.
 \end{enumerate}
+
+O acesso ao código fonte nos permite ter conhecimento dos comandos básicos do jogo, enquanto a biblioteca \textit{Allegro} fornece rotinas de baixo nível comumente necessárias na programação de jogos \cite{allegro}. Essas rotinas, por serem fáceis de manipular, auxiliarão na implementação de um sistema de aprendizado.
 
 O desafio nesse projeto é criar e treinar uma rede neural convolucional capaz de aprender políticas através de pixels brutos em ambientes complexos por meio de um algoritmo de \textit{deep reinforcement learning}. O objetivo principal é implementar um agente que seja capaz de aprender a jogar o maior número de jogos possíveis sem conhecimento prévio do ambiente. Em outras palavras, o sistema deverá ser genérico e o agente não receberá nenhuma informação prévia sobre um jogo específico.
 % subsection aplicação_de_drl_no_treinamento_de_uma_ia_para_aprender_a_jogar_jogos_em_allegro (end)
@@ -109,7 +116,9 @@ Entre as técnicas de IA mais difusas, podemos contar aquelas usadas para gerar 
 O aprendizado de máquina e as redes neurais são aplicadas aos jogos há muito tempo, mas seu uso recentemente conheceu um interesse renovado e aborda uma ampla variedade de tópicos.
 No entanto, o uso dessas técnicas para treinar agentes em ambientes complexos, com várias ações simultâneas possíveis é um resultado bastante desafiador a ser alcançado \cite{Piergigli:drl:2019}.
 
-Recentemente, o \textit{DeepMind} do Google desenvolveu o \textit{Deep Q-network} (DQN), uma arquitetura de rede neural, que demonstrou ser capaz de aprender políticas de controle no nível humano em vários jogos diferentes do Atari 2600 \cite{mnih-human-control-drl}. Os DQNs aprendem a estimar os valores Q (função de valor da ação do estado) de selecionar cada ação do estado atual do jogo. Como a função de valor da ação do estado é uma representação suficiente da política do agente, um jogo pode ser jogado selecionando a ação com o valor Q máximo em cada etapa do tempo. Dessa forma, aprendendo políticas de pixels em tela bruta a ações, essas redes têm demonstrado desempenho avançado em vários jogos do Atari 2600. Vale ressaltar que a mesma rede pode ser usada em várias tarefas sem nenhuma alteração e que o aprendizado é de ponta a ponta, dos valores brutos dos pixels aos valores Q, sem a necessidade de intervenção humana. Recentemente, DQNs foram estendidos para obter melhor desempenho em jogos ainda mais complexos \cite{Debidatta:playing-games-drl:2016}.
+O \textit{DeepMind} do Google desenvolveu o \textit{Deep Q-network} (DQN), uma arquitetura de rede neural, que demonstrou ser capaz de aprender políticas de controle no nível humano em vários jogos diferentes do Atari 2600 \cite{mnih-human-control-drl}. Os DQNs aprendem a estimar os valores Q (função de valor da ação do estado) de selecionar cada ação do estado atual do jogo. Como a função de valor da ação do estado é uma representação suficiente da política do agente, um jogo pode ser jogado selecionando a ação com o valor Q máximo em cada etapa do tempo. Dessa forma, aprendendo políticas de pixels em tela bruta a ações, essas redes têm demonstrado desempenho avançado em vários jogos do Atari 2600. Vale ressaltar que a mesma rede pode ser usada em várias tarefas sem nenhuma alteração e que o aprendizado é de ponta a ponta, dos valores brutos dos pixels aos valores Q, sem a necessidade de intervenção humana. Os DQNs também foram estendidos para obter melhor desempenho em jogos ainda mais complexos \cite{Debidatta:playing-games-drl:2016}.
+
+Um dos feitos mais notáveis nesse contexto, realizado também pelo \textit{DeepMind}, é o da implementação da IA conhecida como \textit{AlphStar}. Essa inteligência artificial alcançou uma classificação de grande mestre depois de ter sido lançada nos servidores europeus do jogo \textit{StarCraft II}, ficando entre os $0,15\%$ dos 90.000 jogadores da região. O domínio do \textit{StarCraft} emergiu como um importante desafio para a pesquisa em inteligência artificial, devido ao seu status icônico e duradouro entre os mais difíceis e-sports profissionais e sua relevância para o mundo real em termos de complexidade bruta e desafios multi-agente. Ao longo de uma década e inúmeras competições, os agentes mais fortes simplificaram aspectos importantes do jogo, utilizaram capacidades sobre-humanas ou empregaram subsistemas artesanais. Apesar dessas vantagens, nenhum agente anterior chegou perto de igualar a habilidade geral dos melhores jogadores de \textit{StarCraft} \cite{vinyals:gm-lv-starcraft}. Tudo isso torna os resultados obtidos pelo AlphaStar ainda mais impressionantes: a IA foi classificada no nível grande mestre e acima de $99,8\%$ dos jogadores humanos classificados oficialmente.
 
 
 

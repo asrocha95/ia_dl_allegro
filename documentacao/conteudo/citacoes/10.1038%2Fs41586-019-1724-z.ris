@@ -1,0 +1,57 @@
+TY  - JOUR
+AU  - Vinyals, Oriol
+AU  - Babuschkin, Igor
+AU  - Czarnecki, Wojciech M.
+AU  - Mathieu, Michaël
+AU  - Dudzik, Andrew
+AU  - Chung, Junyoung
+AU  - Choi, David H.
+AU  - Powell, Richard
+AU  - Ewalds, Timo
+AU  - Georgiev, Petko
+AU  - Oh, Junhyuk
+AU  - Horgan, Dan
+AU  - Kroiss, Manuel
+AU  - Danihelka, Ivo
+AU  - Huang, Aja
+AU  - Sifre, Laurent
+AU  - Cai, Trevor
+AU  - Agapiou, John P.
+AU  - Jaderberg, Max
+AU  - Vezhnevets, Alexander S.
+AU  - Leblond, Rémi
+AU  - Pohlen, Tobias
+AU  - Dalibard, Valentin
+AU  - Budden, David
+AU  - Sulsky, Yury
+AU  - Molloy, James
+AU  - Paine, Tom L.
+AU  - Gulcehre, Caglar
+AU  - Wang, Ziyu
+AU  - Pfaff, Tobias
+AU  - Wu, Yuhuai
+AU  - Ring, Roman
+AU  - Yogatama, Dani
+AU  - Wünsch, Dario
+AU  - McKinney, Katrina
+AU  - Smith, Oliver
+AU  - Schaul, Tom
+AU  - Lillicrap, Timothy
+AU  - Kavukcuoglu, Koray
+AU  - Hassabis, Demis
+AU  - Apps, Chris
+AU  - Silver, David
+PY  - 2019
+DA  - 2019/11/01
+TI  - Grandmaster level in StarCraft II using multi-agent reinforcement learning
+JO  - Nature
+SP  - 350
+EP  - 354
+VL  - 575
+IS  - 7782
+AB  - Many real-world applications require artificial agents to compete and coordinate with other agents in complex environments. As a stepping stone to this goal, the domain of StarCraft has emerged as an important challenge for artificial intelligence research, owing to its iconic and enduring status among the most difficult professional esports and its relevance to the real world in terms of its raw complexity and multi-agent challenges. Over the course of a decade and numerous competitions1–3, the strongest agents have simplified important aspects of the game, utilized superhuman capabilities, or employed hand-crafted sub-systems4. Despite these advantages, no previous agent has come close to matching the overall skill of top StarCraft players. We chose to address the challenge of StarCraft using general-purpose learning methods that are in principle applicable to other complex domains: a multi-agent reinforcement learning algorithm that uses data from both human and agent games within a diverse league of continually adapting strategies and counter-strategies, each represented by deep neural networks5,6. We evaluated our agent, AlphaStar, in the full game of StarCraft II, through a series of online games against human players. AlphaStar was rated at Grandmaster level for all three StarCraft races and above 99.8% of officially ranked human players.
+SN  - 1476-4687
+UR  - https://doi.org/10.1038/s41586-019-1724-z
+DO  - 10.1038/s41586-019-1724-z
+ID  - Vinyals2019
+ER  - 

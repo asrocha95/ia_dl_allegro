@@ -8,13 +8,21 @@
 
 No contexto de jogos digitais, treinar um agente para superar os jogadores humanos e otimizar sua pontuação pode nos ensinar como otimizar processos diferentes em uma variedade de subcampos intrigantes \cite{comi:teach:AI:DRL:2018}. Uma solução proposta na literatura, obtendo ótimos resultados, e que tem como objetivo treinar um computador pra aprender e desenvolver estratégias para jogar diferentes jogos, é o \textit{deep reinforcement learning} (DRL). 
 
-No presente trabalho é proposto a implementação de uma inteligência artificial que, utilizando um algoritmo de \textit{deep reinforcement learning}, seja capaz de aprender a jogar diferentes jogos e desenvolver estratégias para maximizar sua pontuação.
+No presente trabalho é proposto a implementação de uma inteligência artificial que, utilizando um algoritmo de \textit{deep reinforcement learning}, seja capaz de aprender a jogar diferentes jogos e desenvolver estratégias para maximizar sua pontuação. 
 
 Diante das peculiaridades e restrições do problema discutidos em \textbf{\ref{sec:descricao_do_problema}}, a biblioteca \textit{Allegro} foi escolhida como a base para a implementação dos jogos que serão apresentados ao sistema.
 O \textit{Allegro} é uma biblioteca multiplataforma destinada principalmente a jogos de vídeo e programação multimídia. A biblioteca fornece rotinas de baixo nível comumente necessárias na programação de jogos, como a criação de janelas, aceitação de entrada do usuário, carregamento de dados, desenho de imagens, reprodução de sons etc \cite{allegro}.
 
-Por fim, para auxiliar a implementação do sistema, será utilizado um \textit{Allegro Learning Enviroment}, uma ferramenta para o desenvolvimento de inteligência artificial em jogos implementados em \textit{Allegro}. Seu objetivo é oferecer uma plataforma que facilite o desenvolvimento de algoritmos de ML para jogos em \textit{Allegro}.
+A IA será treinada apartir de capturas de tela em diferentes estado do jogo, e da pontuação obtida. Esses dados serão obtidos a partir de um ``\textit{Allegro Learning Enviroment}'' (ALE), o qual consiste de uma ferramenta para o desenvolvimento de inteligência artificial em jogos implementados em \textit{Allegro}. Seu objetivo é oferecer uma plataforma que facilite o desenvolvimento de algoritmos de ML para jogos em \textit{Allegro}, o que irá auxiliar a implementação do sistema.
 
+A \textbf{Figura \ref{arquitetura-abordagem-proposta}} mostra a arquitetura da abordagem proposta. Inicialmente, a ALE irá extrair os comandos básicos do jogo para que o agente tenha conhecimento das limitações físicas do ambiente no qual ele será inserido. Uma vez que o treinamento seja iniciado, a ALE será responsável por obter as capturas de tela que conterão informações sobre o estado atual do jogo, assim como a pontuação obtida pelo agente. Com esses dados, o agente deverá elaborar uma política de decisão para tomar uma ação em cada estado. A ação tomada pelo agente será passada para o jogo, que irá atualizar o seu estado de acordo. Esse ciclo continua até o jogo ser finalizado (seja pelo sucesso ou falha do agente), e uma pontuação final ser obtida. O treinamento do agente consiste na repetição desse processo de modo que a IA, utilizando técnicas de \textit{reinforcement learning}, seja capaz de elaborar uma estratégia para maximizar a pontuação final.
+
+ \begin{figure}[h]
+ \centering
+ \includegraphics[width=.9 \textwidth]{conteudo/imgs/arquitetura-abordagem-proposta.png}
+ \caption[Arquitetura da Abordagem Proposta]{Arquitetura da abordagem proposta. A partir do código fonte do jogo, a ALE extrai os comandos básicos do jogo para que o agente tenha conhecimento de suas limitações físicas. Durante o processo de treinamento, para cada estado do jogo, a ALE passa as informações sobre o estado atual do jogo e a pontuação obtida até então. Com essas informações, o agente toma uma ação que irá influenciar o próximo estado do jogo}
+ \label{arquitetura-abordagem-proposta}
+ \end{figure}
 
 
 % section contextualização (end)
@@ -39,6 +47,8 @@ Por fim, para auxiliar a implementação do sistema, será utilizado um \textit{
  \end{figure}
  % \clearpage
 
+ O reconhecimento de imagens a partir da extração de padrões de pixels brutos, será crucial para o agente no processo de análise do estado atual do jogo. Como mencionado anteriormente, as informações do ambiente e estado atual do jogo serão extraídas a partir de capturas de tela em cada estado. A partir dessas capturas de tela, a IA deverá reconhecer padrões e identificar obstáculos, caminhos disponíveis e objetivos a serem alcançados dentro do jogo. A utilização de capturas de tela permite ao agente se adaptar à cenários onde os obstáculos e caminhos disponíveis são elaborados de forma aleatória, e sua disposição se altera a cada iteração do jogo.
+
  \section{\textit{Reinforcement Learning}} % (fold)
  \label{sec:reinforcement_learning}
 
@@ -46,29 +56,9 @@ Por fim, para auxiliar a implementação do sistema, será utilizado um \textit{
 
  Em algoritmos de \textit{reinforcement learning}, o agente não é informado sobre quais ações executar, mas, em vez disso, deve descobrir quais ações geram mais recompensa, através de tentativa e erro. Em alguns casos mais interessantes, as ações podem afetar não apenas a recompensa imediata, mas também a próxima situação e, com isso, todas as recompensas subsequentes. Essas duas características - pesquisa por tentativa e erro e recompensa atrasada - são as duas características distintivas mais importantes do aprendizado por reforço.
 
- % O aprendizado por reforço é diferente do aprendizado supervisionado, o tipo de aprendizado estudado na maioria das pesquisas atuais no campo do aprendizado de máquina. Aprendizado supervisionado é aprender com um conjunto de treinamento de exemplos rotulados fornecidos por um supervisor externo qualificado. O objetivo desse tipo de aprendizado é o sistema extrapolar ou generalizar suas respostas para que ele atue corretamente em situações não presentes no conjunto de treinamento.
- %  % Este é um tipo importante de aprendizado, mas por si só não é adequado para aprender com a interação. Em problemas interativos, muitas vezes é impraticável obter exemplos do comportamento desejado que sejam corretos e representativos de todas as situações nas quais o agente precisa agir. Em um território desconhecido - onde se espera que a aprendizagem seja mais benéfica - um agente deve ser capaz de aprender com sua própria experiência.
+ O aprendizado por reforço é diferente do aprendizado supervisionado, o tipo de aprendizado estudado na maioria das pesquisas atuais no campo do aprendizado de máquina. Aprendizado supervisionado é aprender com um conjunto de treinamento de exemplos rotulados fornecidos por um supervisor externo qualificado. O objetivo desse tipo de aprendizado é o sistema extrapolar ou generalizar suas respostas para que ele atue corretamente em situações não presentes no conjunto de treinamento. Este é um tipo importante de aprendizado, mas por si só não é adequado para aprender com a interação. Em problemas interativos, muitas vezes é impraticável obter exemplos do comportamento desejado que sejam corretos e representativos de todas as situações nas quais o agente precisa agir. Em um território desconhecido - onde se espera que a aprendizagem seja mais benéfica - um agente deve ser capaz de aprender com sua própria experiência.
 
- %  O aprendizado por reforço também é diferente do que os pesquisadores de aprendizado de máquina chamam de aprendizado não supervisionado, que geralmente consiste em encontrar estruturas ocultas em coleções de dados não rotulados. Os termos aprendizado supervisionado e aprendizado não supervisionado parecem classificar exaustivamente os paradigmas de aprendizado de máquina, mas não o fazem. Embora se possa ficar tentado a pensar no aprendizado por reforço como um tipo de aprendizado não supervisionado, porque não se baseia em exemplos de comportamento correto, o aprendizado por reforço está tentando maximizar um sinal de recompensa em vez de tentar encontrar uma estrutura oculta. Descobrir a estrutura na experiência de um agente certamente pode ser útil no aprendizado por reforço, mas por si só não aborda o problema do aprendizado por reforço de maximizar um sinal de recompensa. Portanto, o aprendizado por reforço é considerado como um terceiro paradigma de aprendizado de máquina, ao lado de aprendizado supervisionado, aprendizado não supervisionado e talvez outros paradigmas  \cite{reinforcement-learning-intro-2018}.
-
- Além do agente e do ambiente, é interessante ressaltar outros elementos importantes de um sistema de aprendizado por reforço: a \textbf{política}, o \textbf{sinal de recompensa} e a \textbf{função de valor}.
-
- A \textbf{política} define a maneira que o agente deve se comportar em um determinado momento. 
- Uma política é basicamente um mapeamento dos estados do ambiente para as ações a serem tomadas quando nesses estados. 
- A política em casos mais simples ter a forma de uma função simples ou uma tabela de pesquisa, enquanto em casos mais complexos pode envolver cálculos mais extensivos. 
- Em geral, as políticas podem ser estocásticas, especificando probabilidades para cada ação.
-
- Um \textbf{sinal de recompensa} define o objetivo de um problema de aprendizado por reforço. 
- Em cada etapa, o ambiente envia ao agente de aprendizado por reforço um único número que funciona como uma recompensa para o agente. 
- O único objetivo do agente é maximizar a recompensa total que recebe a longo prazo.
- O sinal de recompensa define, portanto, quais são os eventos bons e ruins para o agente. 
- O sinal de recompensa é a base principal para alterar a política - se uma ação selecionada pela política for seguida por uma baixa recompensa, a política poderá ser alterada para selecionar outra ação nessa situação no futuro. 
- Em geral, os sinais de recompensa podem ser funções estocásticas do estado do ambiente e das ações tomadas.
-
- Enquanto o sinal de recompensa indica o que é bom em um sentido imediato, uma \textbf{função de valor} especifica o que é bom a longo prazo. 
- O valor de um estado representa a quantidade total de recompensa que um agente pode esperar acumular no futuro, a partir desse estado. 
- Enquanto as recompensas determinam a conveniência imediata e intrínseca dos estados ambientais, os valores indicam a conveniência a longo prazo dos estados após levar em conta os estados que provavelmente seguirão e as recompensas disponíveis nesses estados. 
- Por exemplo, um estado sempre pode gerar uma recompensa imediata baixa, mas ainda tem um valor alto porque é seguido regularmente por outros estados que produzem recompensas altas. Ou o contrário poderia ser verdade. 
+ O aprendizado por reforço também é diferente do que os pesquisadores de aprendizado de máquina chamam de aprendizado não supervisionado, que geralmente consiste em encontrar estruturas ocultas em coleções de dados não rotulados. Os termos aprendizado supervisionado e aprendizado não supervisionado parecem classificar exaustivamente os paradigmas de aprendizado de máquina, mas não o fazem. Embora se possa ficar tentado a pensar no aprendizado por reforço como um tipo de aprendizado não supervisionado, porque não se baseia em exemplos de comportamento correto, o aprendizado por reforço está tentando maximizar um sinal de recompensa em vez de tentar encontrar uma estrutura oculta. Descobrir a estrutura na experiência de um agente certamente pode ser útil no aprendizado por reforço, mas por si só não aborda o problema do aprendizado por reforço de maximizar um sinal de recompensa. Portanto, o aprendizado por reforço é considerado como um terceiro paradigma de aprendizado de máquina, ao lado de aprendizado supervisionado, aprendizado não supervisionado e talvez outros paradigmas  \cite{reinforcement-learning-intro-2018}.
 
  A \textbf{Figura \ref{rl-diagram}} mostra um diagrama de aprendizagem por reforço relacionando o agente de aprendizado com o ambiente no qual ele é inserido.
  O ambiente representa o mundo pelo qual o agente se move. O ambiente nada mais é do que um sistema que toma o estado atual e a ação do agente como entrada e retorna como saída a recompensa do agente e seu próximo estado. 
@@ -93,9 +83,45 @@ Por fim, para auxiliar a implementação do sistema, será utilizado um \textit{
  % Infelizmente, é muito mais difícil determinar valores do que determinar recompensas. 
  As recompensas são basicamente dadas diretamente pelo ambiente, mas os valores devem ser estimados e re-estimados a partir das sequências de observações que um agente faz ao longo de toda a sua vida útil.
 
+ Além do agente e do ambiente, é interessante ressaltar outros elementos importantes de um sistema de aprendizado por reforço: a \textbf{política}, o \textbf{sinal de recompensa} e a \textbf{função de valor}.
+
+ A \textbf{política} define a maneira que o agente deve se comportar em um determinado momento. 
+ Uma política é basicamente um mapeamento dos estados do ambiente para as ações a serem tomadas quando nesses estados. 
+ A política em casos mais simples ter a forma de uma função simples ou uma tabela de pesquisa, enquanto em casos mais complexos pode envolver cálculos mais extensivos. 
+ Em geral, as políticas podem ser estocásticas, especificando probabilidades para cada ação.
+
+ Um \textbf{sinal de recompensa} define o objetivo de um problema de aprendizado por reforço. 
+ Em cada etapa, o ambiente envia ao agente de aprendizado por reforço um único número que funciona como uma recompensa para o agente. 
+ O único objetivo do agente é maximizar a recompensa total que recebe a longo prazo.
+ O sinal de recompensa define, portanto, quais são os eventos bons e ruins para o agente. 
+ O sinal de recompensa é a base principal para alterar a política - se uma ação selecionada pela política for seguida por uma baixa recompensa, a política poderá ser alterada para selecionar outra ação nessa situação no futuro. 
+ Em geral, os sinais de recompensa podem ser funções estocásticas do estado do ambiente e das ações tomadas.
+
+ Enquanto o sinal de recompensa indica o que é bom em um sentido imediato, uma \textbf{função de valor} especifica o que é bom a longo prazo. 
+ O valor de um estado representa a quantidade total de recompensa que um agente pode esperar acumular no futuro, a partir desse estado. 
+ Enquanto as recompensas determinam a conveniência imediata e intrínseca dos estados ambientais, os valores indicam a conveniência a longo prazo dos estados após levar em conta os estados que provavelmente seguirão e as recompensas disponíveis nesses estados. 
+ Por exemplo, um estado sempre pode gerar uma recompensa imediata baixa, mas ainda tem um valor alto porque é seguido regularmente por outros estados que produzem recompensas altas. Ou o contrário poderia ser verdade. 
+
 
  O \textit{deep reinforcement learning} (DRL) é uma abordagem do \textit{deep learning} que, em contraste a abordagens mais tradicionais como o aprendizado supervisionado e não supervisionado, utiliza as técnicas de aprendizagem por reforço para treinar o agente. Essa abordagem consiste em fornecer ao sistema parâmetros relacionados ao seu estado e uma recompensa positiva ou negativa com base em suas ações. Nenhuma regra sobre o jogo é dada e, inicialmente, o agente não tem nenhuma informação sobre o que precisa fazer. O objetivo do sistema é descobrir e elaborar uma estratégia para maximizar sua pontuação - ou recompensa.
 
+
+ \section{\textit{Allegro}}
+
+O \textit{Allegro} é uma biblioteca multiplataforma destinada principalmente a jogos de vídeo e programação multimídia. A biblioteca fornece rotinas de baixo nível comumente necessárias na programação de jogos, como a criação de janelas, aceitação de entrada do usuário, carregamento de dados, desenho de imagens, reprodução de sons etc \cite{allegro}. Algumas outras características da biblioteca que facilitam a implementação de jogos são:
+
+\begin{itemize}
+	\item Suportada em Windows, Linux, Mac OS, iPhone e Android;
+	\item API intuitiva e amigável, utilizável em C, C ++ e em muitas outras linguagens;
+	\item Bitmap acelerado por hardware e suporte a desenho gráfico primitivo (via OpenGL ou Direct3D);
+	\item Suporte de gravação de áudio;
+	\item Carregamento e desenho de fontes;
+	\item Reprodução de vídeo.
+\end{itemize}
+
+A implementação de uma ferramenta de aprendizado voltada para jogos em \textit{Allegro}, é facilitada pelo fato de o \textit{Allegro} ser simples e amigável, o que permite a extração dos comandos básicos do jogo a partir do seu código fonte, funcionalidade essencial para a implementação de uma ferramenta genérica.
+
+ Outro motivo que levou à escolha da biblioteca como requisito importante do projeto, é a funcionalidade de controle de \textit{frame rates}. Um jogo que possua uma alta taxa de quadros, ou \textit{frames per second} (FPS), apresenta uma saída com um grande número de informação em um intervalo curto de tempo. Esse alto fluxo de informações pode sobrecarregar a IA, ou até mesmo apresentar perda de informação (\textit{frame drops}), o que pode resultar em um treinamento ineficiente em uma arquitetura com baixo poder computacional. Ao reduzir o FPS do jogo, podemos diminuir a velocidade com que os estados do jogo são atualizados, diminuindo a quantidade de informação que deve ser tratada e permitindo o desenvolvimento de uma IA em arquiteturas com menor poder computacional.
 
 
 \section{Aplicação de DRL em um \textit{Allegro Learning Enviroment}} % (fold)
@@ -104,11 +130,13 @@ Por fim, para auxiliar a implementação do sistema, será utilizado um \textit{
  O \textit{Arcade Learning Enviroment} é uma ferramenta de software que oferece uma interface para interagir com ambientes de jogos Atari 2600 emulados. Seu objetivo é oferecer uma plataforma que facilite o desenvolvimento de agentes de aprendizado para aprender a jogar jogos Atari. Essa ferramenta também fornece uma camada de manipulação de jogos que
  transforma cada jogo em um problema padrão de aprendizado por reforço, identificando a pontuação acumulada e se o jogo terminou. \cite{arcade-learning-enviroment}
 
- Inspirado na plataforma descrita acima, este trabalho visa a utilização de um \textit{Allegro Learning Enviroment}, que funcionaria de forma semelhante ao \textit{Arcade Learning Enviroment}, com a distinção de que o primeiro seria uma plataforma voltada para jogos implementados em \textit{Allegro}. O \textit{Allegro Learning Enviroment} (ALE) terá como base a ferramenta implementada por \cite{silva:amb-jd-allegro}, que oferece um ambiente facilitador ao estudo de soluções de IA aplicada em jogos. Essa ferramenta fornece funcionalidades como a exportação dos comandos básicos de um jogo, que precisam ser passados para o agente para que o mesmo tenha conhecimento dos limites físicos do ambiente no qual está inserido. Isso permite que o pesquisador não fique limitado a um jogo existente, mas possa usar qualquer jogo que ele tenha acesso ao código fonte e feito em \textit{Allegro}.
+ Inspirado na plataforma descrita acima, este trabalho visa a utilização de um \textit{Allegro Learning Enviroment}, que funcionaria de forma semelhante ao \textit{Arcade Learning Enviroment}, com a distinção de que o primeiro seria uma plataforma voltada para jogos implementados exclusivamente em \textit{Allegro}.
+
+ O \textit{Allegro Learning Enviroment} (ALE) terá como base a ferramenta implementada por \cite{silva:amb-jd-allegro}, que oferece um ambiente facilitador ao estudo de soluções de IA aplicada em jogos. Essa ferramenta fornece funcionalidades como a exportação dos comandos básicos de um jogo, que precisam ser passados para o agente para que o mesmo tenha conhecimento dos limites físicos do ambiente no qual está inserido. Isso permite que o pesquisador não fique limitado a um jogo existente, mas possa usar qualquer jogo que ele tenha acesso ao código fonte e feito em \textit{Allegro}. Outra funcionalidade fornecida pelo ALE, é a possibilidade de se extrair a pontuação e obter capturas de tela em cada estado do jogo, informações que devem ser fornecidas para o treinamento do agente.
 
  Para o treinamento do agente, serão utilizados capturas da tela em cada estado do jogo, obtidas pelo ALE. A partir dessas imagens serão extraídas  as informações do estado atual do jogo (posição do jogador, obstáculos, etc), de forma a determinar qual a melhor ação do agente para a situação na qual ele se encontra. A utilização de capturas de tela como entradas para o agente permite que a IA seja treinada para situações em que hajam obstáculos gerados de forma aleatória. A partir dessas imagens, o agente deverá ser capaz de identificar tais obstáculos, sua localização e a melhor maneira de lidar com os mesmos.
 
- Em relação aos jogos nos quais o agente será treinado, a proposta é de se utilizar diferentes jogos de diferentes complexidades para avaliar o potencial do sistema. Os jogos serão obtidos de fontes de código aberto disponíveis \textit{online} ou, caso seja necessário, serão implementados com os requisitos necessário para o projeto.
+ Em relação aos jogos nos quais o agente será treinado, a proposta é de inicializar o treinamento com jogos mais simples (e.g. \textit{Snake, Frogger, Agar.io}). Se possível, neste trabalho ou em trabalhos posteriores, a ideia é de se utilizar diferentes jogos de diferentes complexidades para avaliar o potencial do sistema. Os jogos serão obtidos de fontes de código aberto disponíveis \textit{online} ou, caso seja necessário, serão implementados com os requisitos necessário para o projeto.
 
 
 
