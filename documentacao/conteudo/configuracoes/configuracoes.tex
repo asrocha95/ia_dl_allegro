@@ -4,6 +4,12 @@
 % --- 
 
 % ---
+%Configuração do pacote tabularx
+\renewcommand\tabularxcolumn[1]{m{#1}}% for vertical centering text in X column
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcolumntype{N}{>{\centering\arraybackslash}m{6cm}}
+\newcolumntype{G}{>{\centering\arraybackslash}m{20cm}}
+
 % Configurações do pacote backref
 % Usado sem a opção hyperpageref de backref
 \renewcommand{\backrefpagesname}{Citado na(s) página(s):~}
