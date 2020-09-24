@@ -20,8 +20,6 @@ LIB_ALLEGRO=\lib\liballegro-$(ALLEGRO_VERSION)-monolith-mt.a
 INCLUDE_ALLEGRO=\include
 I=-I
 
-RM=del
-
 else
     #Linux stuff
 PATH_ALLEGRO=
