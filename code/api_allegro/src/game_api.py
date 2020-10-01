@@ -26,12 +26,10 @@ class state():
 	def print(self,):
 		if self.win.isActive:
 			self.n = self.n+1
-			# return ag.screenshot('img'+bar+self.name+str(self.n)+'.jpg')
-			return ag.screenshot('img'+bar+self.name+str(self.n)+'.jpg', region=(self.win.left, self.win.top, self.win.width, self.win.height))
+			print_name = '.'+bar+'img'+bar+self.name+str(self.n)+'.jpg'
+			return ag.screenshot(print_name, region=(self.win.left, self.win.top, self.win.width, self.win.height))
 
 	def print_clock(self, name, t):
-		# pid = os.fork()
-		# if pid == 0:
 		while self.win.isActive:
 			if time() - self.ct > t:
 				self.ct = time()
@@ -42,6 +40,9 @@ class state():
 class ctrl:
 	def __init__(self,path,fexe,title):
 		# Se desloca para a pasta do programa
+		print(path)
+		print(fexe)
+		print(title)
 		os.chdir(path)
 		# Inicia o programa em um novo proocesso
 		self.process = subprocess.Popen(fexe, shell=True)

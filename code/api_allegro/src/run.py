@@ -1,10 +1,12 @@
-from game_ai import *
+from game_api import *
 import pyautogui as ag
 from random import randint
 import sys
 import os
 import platform
 import time
+
+AGENT_FPS = 1
 
 if platform.system() == "Windows":
     bar = '\\'
@@ -18,27 +20,28 @@ else:
     quit()
 
 if len(sys.argv) > 2:
-    f_name = sys.argv[2]
+    path = sys.argv[2]
 else:
-    f_name = "_"+game
+    path = "."+bar
 
-if not os.path.isfile(".."+bar+"games"+bar+folder+bar+game+".c"):
-    print("Arquivo 'games"+bar+folder+bar+game+".c' nao existe")
+
+game_file = path+bar+game+".c"
+
+if not os.path.isfile(game_file):
+    print("Arquivo '"+game_file+"' não existe!")
     quit()
 
-print(".."+bar+"games"+bar+folder+bar+game+".c")
-data = finder(".."+bar+"games"+bar+folder+bar+game+".c")
-# print(data)
+data = finder(game_file)
 print(data.keys)
 
-control = ctrl(".."+bar+"games"+bar+folder, game+".exe", game+".exe")
-capture = state(control.window,f_name)
+control = ctrl(path+bar, './'+game+".exe", game+".exe")
+capture = state(control.window,game)
 
 # capture.print_clock(f_name, 300)
 
 l = len(data.keys)-1
 while control.window.isActive:
-    time.sleep(1)
+    time.sleep(1/AGENT_FPS)
     if data.keyboard:
         a = data.keys[randint(0,l)]
         if a != 'escape':
