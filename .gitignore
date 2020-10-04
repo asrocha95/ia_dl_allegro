@@ -1,4 +1,6 @@
 allegro_game_ai/
+code/frogger/img/
+__pycache__/
 .DS_Store
 *.aux
 *.bbl
@@ -16,3 +18,4 @@ allegro_game_ai/
 *.lof
 *.lot
 *.loq
+*.o

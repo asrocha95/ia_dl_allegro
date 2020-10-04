@@ -2,8 +2,10 @@ import pyautogui as ag
 import pygetwindow as gw
 import os
 import subprocess
+import signal
 from time import time
 import platform
+import shutil
 
 if platform.system() == "Windows":
     bar = '\\'
@@ -15,18 +17,23 @@ class state():
 	n = 0
 	nt = 0
 	ct = 0.0
-	def __init__(self, window, name):
+	def __init__(self, window,path, name):
 		self.win = window
 		self.name = name
-		if not os.path.exists('img'):
-			os.makedirs('img')
+		self.path = path
+		if not os.path.exists(self.path+bar+'img'):
+			os.makedirs(self.path+bar+'img')
+		else: 
+			shutil.rmtree(self.path+bar+'img')
+			os.makedirs(self.path+bar+'img')
+		
 
 		self.print()
 		
-	def print(self,):
+	def print(self):
 		if self.win.isActive:
 			self.n = self.n+1
-			print_name = '.'+bar+'img'+bar+self.name+str(self.n)+'.jpg'
+			print_name = self.path+bar+'img'+bar+self.name+str(self.n)+'.jpg'
 			return ag.screenshot(print_name, region=(self.win.left, self.win.top, self.win.width, self.win.height))
 
 	def print_clock(self, name, t):
@@ -38,14 +45,9 @@ class state():
 
 # Atuador
 class ctrl:
-	def __init__(self,path,fexe,title):
-		# Se desloca para a pasta do programa
-		print(path)
-		print(fexe)
-		print(title)
-		os.chdir(path)
+	def __init__(self,fexe,title):
 		# Inicia o programa em um novo proocesso
-		self.process = subprocess.Popen(fexe, shell=True)
+		self.process = subprocess.Popen(fexe, stdout=subprocess.PIPE, shell=True)
 		
 		# Espera a janela abrir e a ativa 
 		while True:	
@@ -57,6 +59,11 @@ class ctrl:
 				pass 
 	def edges(self):
 		return self.window.left, self.window.left+self.window.width, self.window.top, self.window.top+self.window.height
+
+	def stop(self):
+		self.process.terminate()
+		while self.window.isActive:
+			pass
 
 # Identificador
 class finder:

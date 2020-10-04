@@ -156,7 +156,7 @@ int main(int argc, char **argv)
         al_start_timer(timer);
 
         //enquanto playing for verdadeiro, faca:
-        while(playing) {
+        while(playing && collision==0) {
                 ALLEGRO_EVENT ev;
                 //espera por um evento e o armazena na variavel de evento ev
                 al_wait_for_event(event_queue, &ev);
@@ -239,36 +239,36 @@ int main(int argc, char **argv)
 
         } //fim do while
 
-        //inicializa o modulo allegro que carrega as fontes
-        al_init_font_addon();
-        //inicializa o modulo allegro que entende arquivos tff de fontes
-        al_init_ttf_addon();
-        //carrega o arquivo arial.ttf da fonte Arial e define que sera usado o tamanho 32 (segundo parametro)
-        ALLEGRO_FONT *size_32 = al_load_font("arial.ttf", 32, 1);
+        // //inicializa o modulo allegro que carrega as fontes
+        // al_init_font_addon();
+        // //inicializa o modulo allegro que entende arquivos tff de fontes
+        // al_init_ttf_addon();
+        // //carrega o arquivo arial.ttf da fonte Arial e define que sera usado o tamanho 32 (segundo parametro)
+        // ALLEGRO_FONT *size_32 = al_load_font("arial.ttf", 32, 1);
 
-        char *my_text;
+        // // char *my_text;
+        // char my_text[20];
+        // //colore toda a tela de preto
+        // al_clear_to_color(al_map_rgb(0,0,0));
+        // //imprime o texto armazenado em my_text na posicao x=10,y=10 e com a cor rgb(128,200,30)
+        // if(collision)
+        // {
+        // sprintf(my_text, "PERDEU : %.2f segundos", al_get_timer_count(timer)/FPS);
+        // al_draw_text(size_32, al_map_rgb(0, 200, 30), SCREEN_W/4, SCREEN_H/2, 0, my_text);
+        // sprintf(my_text, "Colisoes : %d", collision);
+        // al_draw_text(size_32, al_map_rgb(0, 200, 30), SCREEN_W/4, 3*(SCREEN_H/5), 0, my_text);
+        // }
+        // else
+        // {
+        //         sprintf(my_text, "Ganhou: %.2f segundos", al_get_timer_count(timer)/FPS);
+        //         al_draw_text(size_32, al_map_rgb(0, 200, 30), SCREEN_W/4, SCREEN_H/2, 0, my_text);
+        //         sprintf(my_text, "Colisoes : %d", collision);
+        //         al_draw_text(size_32, al_map_rgb(0, 200, 30), SCREEN_W/4, 3*(SCREEN_H/5), 0, my_text);
+        // }
 
-        //colore toda a tela de preto
-        al_clear_to_color(al_map_rgb(0,0,0));
-        //imprime o texto armazenado em my_text na posicao x=10,y=10 e com a cor rgb(128,200,30)
-        if(collision)
-        {
-        sprintf(my_text, "PERDEU : %.2f segundos", al_get_timer_count(timer)/FPS);
-        al_draw_text(size_32, al_map_rgb(0, 200, 30), SCREEN_W/4, SCREEN_H/2, 0, my_text);
-        sprintf(my_text, "Colisoes : %d", collision);
-        al_draw_text(size_32, al_map_rgb(0, 200, 30), SCREEN_W/4, 3*(SCREEN_H/5), 0, my_text);
-        }
-        else
-        {
-                sprintf(my_text, "Ganhou: %.2f segundos", al_get_timer_count(timer)/FPS);
-                al_draw_text(size_32, al_map_rgb(0, 200, 30), SCREEN_W/4, SCREEN_H/2, 0, my_text);
-                sprintf(my_text, "Colisoes : %d", collision);
-                al_draw_text(size_32, al_map_rgb(0, 200, 30), SCREEN_W/4, 3*(SCREEN_H/5), 0, my_text);
-        }
-
-        //reinicializa a tela
-        al_flip_display();
-        al_rest(3);
+        // //reinicializa a tela
+        // al_flip_display();
+        // al_rest(3);
 
         //procedimentos de fim de jogo (fecha a tela, limpa a memoria, etc)
 

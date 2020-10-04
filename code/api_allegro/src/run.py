@@ -6,12 +6,14 @@ import os
 import platform
 import time
 
-AGENT_FPS = 1
+AGENT_FPS = 10
 
 if platform.system() == "Windows":
     bar = '\\'
+    fexe = ''
 else:
     bar = '/'
+    fexe = '.'+bar
 
 if len(sys.argv) > 1:
     folder = game = sys.argv[1]
@@ -34,7 +36,9 @@ if not os.path.isfile(game_file):
 data = finder(game_file)
 print(data.keys)
 
-control = ctrl(path+bar, './'+game+".exe", game+".exe")
+fexe = fexe+game+".exe"
+control = ctrl(path+bar, fexe, game+".exe")
+time.sleep(1/AGENT_FPS)
 capture = state(control.window,game)
 
 # capture.print_clock(f_name, 300)
