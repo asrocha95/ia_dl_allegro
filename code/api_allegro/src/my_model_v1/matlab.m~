@@ -1,0 +1,10 @@
+close all; clear; clc;
+
+load reward_hist.csv
+
+% plot(reward_hist(:,2),reward_hist(:,3))
+
+reward = reward_hist(:,2:3);
+avg_last_100 = zeros(size(reward));
+
+for i=1:

@@ -6,9 +6,16 @@ import signal
 from time import time
 import platform
 import shutil
+from PIL import Image
+
+OS_is_MAC = False
 
 if platform.system() == "Windows":
     bar = '\\'
+
+elif platform.system() == "Darwin":
+	OS_is_MAC = True
+	bar = '/'
 else:
     bar = '/'
 
@@ -27,43 +34,81 @@ class state():
 			shutil.rmtree(self.path+bar+'img')
 			os.makedirs(self.path+bar+'img')
 		
-
-		self.print()
-		
 	def print(self):
 		if self.win.isActive:
 			self.n = self.n+1
-			print_name = self.path+bar+'img'+bar+self.name+str(self.n)+'.jpg'
+			print_name = self.path+bar+'img'+bar+self.name+str(self.n)+'.png'
+
+			# if OS_is_MAC:
+			# 	screen_capt_command = 'screencapture -R ' + str(self.win.left) + ',' + str(self.win.top) + ',' + str(self.win.width) + ',' + str(self.win.height)  + ' ' + print_name
+			# 	subprocess.call(screen_capt_command,shell=True)
+			# 	return Image.open(print_name)
+
 			return ag.screenshot(print_name, region=(self.win.left, self.win.top, self.win.width, self.win.height))
+		
 
 	def print_clock(self, name, t):
 		while self.win.isActive:
 			if time() - self.ct > t:
 				self.ct = time()
 				self.nt = self.nt+1
-				ag.screenshot('img\\'+name+'_t_'+str(self.nt)+'.jpg', region=(self.win.left, self.win.top, self.win.width, self.win.height))
+				ag.screenshot('img\\'+name+'_t_'+str(self.nt)+'.png', region=(self.win.left, self.win.top, self.win.width, self.win.height))
 
 # Atuador
 class ctrl:
-	def __init__(self,fexe,title):
+	def __init__(self,fexe,title,locate_on_screen=None,box_height=None,box_width=None,adjust_top=0,adjust_left=0):
+		self.locate_on_screen = locate_on_screen
 		# Inicia o programa em um novo proocesso
 		self.process = subprocess.Popen(fexe, stdout=subprocess.PIPE, shell=True)
-		
+		self.window = self.getWindowMac(title,locate_on_screen,box_height,box_width,adjust_top,adjust_left) if OS_is_MAC else self.getWindowWindows(title)
+
+	def getWindowWindows(self,title):
 		# Espera a janela abrir e a ativa 
 		while True:	
 			try: 
-				self.window = gw.getWindowsWithTitle(title)[0]
-				self.window.activate()
+				window = gw.getWindowsWithTitle(title)[0]
+				window.activate()
 				break
 			except:
 				pass 
+
+		return window;
+
+	def getWindowMac(self,title,locate_on_screen,box_height,box_width=None,adjust_top=0,adjust_left=0): # !!!! Workaround - NOT RECOMENDED !!!!
+		#Obtem janela
+		return window_for_mac(title,locate_on_screen,box_height,box_width,adjust_top,adjust_left)
+
 	def edges(self):
 		return self.window.left, self.window.left+self.window.width, self.window.top, self.window.top+self.window.height
 
 	def stop(self):
 		self.process.terminate()
-		while self.window.isActive:
-			pass
+		if OS_is_MAC:
+			self.window.isActive = ag.locateOnScreen(self.locate_on_screen) is not None
+		else:
+			while self.window.isActive:
+				pass
+# Classe de janela para Mac !!!! Workaround - NOT RECOMENDED !!!!
+class window_for_mac:
+	def __init__(self,title,locate_on_screen,box_height,box_width=None,adjust_top=0,adjust_left=0):
+		self.title = title
+		self.isActive = False
+		self.box_region = None
+		while not self.isActive:
+			try:
+				self.box_region=ag.locateOnScreen(locate_on_screen)
+				self.isActive = self.box_region is not None
+			except:
+				pass
+
+		self.top = self.box_region.top + self.box_region.height + adjust_top
+		self.left = self.box_region.left + adjust_left
+		self.width = box_width if box_width is not None else self.box_region.width
+		self.height = box_height
+
+	
+		
+		
 
 # Identificador
 class finder:
