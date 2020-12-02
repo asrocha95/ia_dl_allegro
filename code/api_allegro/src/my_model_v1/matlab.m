@@ -16,7 +16,9 @@ for i=1:length(reward)
 end
 
 figure
-plot(1:length(reward),reward(:,2),'r')
+plot(reward(:,1),reward(:,2),'r')
+title('Recompensa total por episódio')
 
 figure
-plot(1:length(reward),avg_last_100(:),'b')
+plot(reward(:,1),avg_last_100(:),'b')
+title('Recompensa média dos últimos 100 episódios')

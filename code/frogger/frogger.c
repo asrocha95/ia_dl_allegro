@@ -23,7 +23,7 @@ const float FPS         = 60.0;   // frames por segundo
 const int   SCREEN_W    = 640;    // largura tela
 const int   SCREEN_H    = 480;    // altura tela
 const int BOUNCER_SIZE  = 32;     // tamanho do bouncer
-
+const int BOUNCER_DX_MOD = 10;
 typedef struct point_integer
 {
         int x, y;
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 
         //posicoes x e y iniciais do frog
         float bouncer_x = SCREEN_W / 2.0 - BOUNCER_SIZE / 2.0;
-        float bouncer_y = SCREEN_H - BOUNCER_SIZE;
+        float bouncer_y = SCREEN_H - BOUNCER_SIZE - 5;
         // o quanto as posicoes x e y vao variar ao longo do tempo. No t=1,
         // se x do bouncer eh 40, no t=2, x do bouncer eh 40 + bouncer_dx = 36
         float bouncer_dx = SCREEN_W /20.0, bouncer_dy = (float)SCREEN_H / NUM_STREETS;
@@ -77,6 +77,8 @@ int main(int argc, char **argv)
 
         int i;
         int collision_on_going;
+
+        srand((unsigned) time(0));
 
 
 
@@ -108,19 +110,6 @@ int main(int argc, char **argv)
                 return -1;
         }
 
-        //buses
-        for(i=0; i<NUM_STREETS; i++) {
-                buses_y[i] = i*TAM_RUA + 0.1*TAM_RUA;
-                buses_x[i] = 0;
-                buses_comp[i] = rand()%(SCREEN_W/4) + 10;
-                buses_dx[i] = 3*(float)rand()/(float)RAND_MAX;
-                buses[i] = al_create_bitmap(buses_comp[i], LARGURA_BUS);
-                al_set_target_bitmap(buses[i]);
-                al_clear_to_color(al_map_rgb(rand()%256, rand()%256, rand()%256));
-        }
-
-        al_install_keyboard();
-
         //avisa o allegro que eu quero modificar as propriedades do bouncer
         al_set_target_bitmap(bouncer);
 
@@ -131,6 +120,36 @@ int main(int argc, char **argv)
         al_set_target_bitmap(al_get_backbuffer(display));
         //colore a tela de preto (rgb(0,0,0))
         al_clear_to_color(al_map_rgb(0,0,0));
+
+        al_draw_bitmap(bouncer, bouncer_x, bouncer_y, 0);
+
+        //buses
+        for(i=0; i<NUM_STREETS; i++) {
+                buses_y[i] = i*TAM_RUA + 0.1*TAM_RUA;
+                buses_comp[i] = rand()%(SCREEN_W/4 - BOUNCER_SIZE) + BOUNCER_SIZE;
+
+                // Inicializa posição dos obstáculos aleatioriamente
+                if(i!=NUM_STREETS-1)
+                    buses_x[i] = rand()%(int)(SCREEN_W - buses_comp[i]);
+                else
+                    buses_x[i] = 0;
+
+                // buses_dx[i] = 3*BOUNCER_DX_MOD*(float)rand()/(float)RAND_MAX;
+                buses_dx[i] = bouncer_dx-10;
+                buses[i] = al_create_bitmap(buses_comp[i], LARGURA_BUS);
+                al_set_target_bitmap(buses[i]);
+                al_clear_to_color(al_map_rgb(rand()%256, rand()%256, rand()%256));
+                
+                // Desenha bus
+                if (i!=NUM_STREETS){
+                    al_set_target_bitmap(al_get_backbuffer(display));
+                    al_draw_bitmap(buses[i], buses_x[i], buses_y[i], 0);
+                }
+        }
+
+        al_install_keyboard();
+
+        al_set_target_bitmap(al_get_backbuffer(display));
 
         //cria a fila de eventos
         event_queue = al_create_event_queue();
@@ -170,10 +189,11 @@ int main(int argc, char **argv)
                                 bouncer_y -= bouncer_dy;
                                 if(bouncer_y < 0)
                                         playing = 0;
+                                    // bouncer_y = SCREEN_H - BOUNCER_SIZE;
                                 break;
                         //se a tecla for o S
                         case ALLEGRO_KEY_S:
-                                if(bouncer_y < SCREEN_H - BOUNCER_SIZE)
+                                if(bouncer_y < SCREEN_H - BOUNCER_SIZE - 5)
                                         bouncer_y += bouncer_dy;
                                 break;
 
@@ -187,52 +207,61 @@ int main(int argc, char **argv)
                                         bouncer_x += bouncer_dx;
                                 break;
 
+                        case ALLEGRO_KEY_BACKSPACE:
+                            break;
+
                         case ALLEGRO_KEY_ESCAPE:
                                 playing = 0;
                                 break;
-                        }
+                    
+                    }
 
+                    // Atualiza estado do jogo
+                    //limpo a tela
+                    al_clear_to_color(al_map_rgb(0,0,0));
+                    //desenho o bouncer nas novas posicoes x e y
+                    al_draw_bitmap(bouncer, bouncer_x, bouncer_y, 0);
+
+                    collision_on_going = 0;
+                    for(i=0; i<NUM_STREETS; i++) {
+                            buses_x[i] += buses_dx[i];
+                            if(buses_x[i] > SCREEN_W)
+                                    buses_x[i] = 0;
+
+                            al_draw_bitmap(buses[i], buses_x[i], buses_y[i], 0);
+
+                            if( (bouncer_x + BOUNCER_SIZE > buses_x[i] \
+                                && bouncer_x < buses_x[i] + buses_comp[i]) \
+                                && (bouncer_y < buses_y[i] + LARGURA_BUS \
+                                && bouncer_y + BOUNCER_SIZE > buses_y[i]) )
+                            {
+                                    // playing = 0;
+                                    collision_on_going = 1;
+                                    if (!collided)
+                                    {
+                                            collided = 1;
+                                            collision += 1;
+                                            // printf("colided: %d\n", collision);
+                                            fprintf(stdout, "lost");
+                                    }
+                            }
+
+                    }
+                    if (!collision_on_going)
+                    {
+                            collided = 0;
+                    }
+
+                    //reinicializo a tela
+                    al_flip_display();
                 }
 
                 //se o tipo de evento for um evento do temporizador, ou seja, se o tempo passou de t para t+1
-                if(ev.type == ALLEGRO_EVENT_TIMER) {
-                        //limpo a tela
-                        al_clear_to_color(al_map_rgb(0,0,0));
-                        //desenho o bouncer nas novas posicoes x e y
-                        al_draw_bitmap(bouncer, bouncer_x, bouncer_y, 0);
-
-                        collision_on_going = 0;
-                        for(i=0; i<NUM_STREETS; i++) {
-                                buses_x[i] += buses_dx[i];
-                                if(buses_x[i] > SCREEN_W)
-                                        buses_x[i] = 0;
-                                al_draw_bitmap(buses[i], buses_x[i], buses_y[i], 0);
-
-                                if( (bouncer_x + BOUNCER_SIZE > buses_x[i] \
-                                    && bouncer_x < buses_x[i] + buses_comp[i]) \
-                                    && (bouncer_y < buses_y[i] + LARGURA_BUS \
-                                    && bouncer_y > buses_y[i]) )
-                                {
-                                        // playing = 0;
-                                        collision_on_going = 1;
-                                        if (!collided)
-                                        {
-                                                collided = 1;
-                                                collision += 1;
-                                                printf("colided: %d\n", collision);
-                                        }
-                                }
-
-                        }
-                        if (!collision_on_going)
-                        {
-                                collided = 0;
-                        }
-                        //reinicializo a tela
-                        al_flip_display();
-                }
+                // if(ev.type == ALLEGRO_EVENT_TIMER) {
+                        
+                // }
                 //se o tipo de evento for o fechamento da tela (clique no x da janela)
-                else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+                if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
                         //interrompe o while(1)
                         break;
                 }
@@ -266,9 +295,28 @@ int main(int argc, char **argv)
         //         al_draw_text(size_32, al_map_rgb(0, 200, 30), SCREEN_W/4, 3*(SCREEN_H/5), 0, my_text);
         // }
 
-        // //reinicializa a tela
-        // al_flip_display();
-        // al_rest(3);
+        //reinicializa a tela
+        // al_clear_to_color(al_map_rgb(255,0,0));
+        // //////////////
+        // Atualiza estado do jogo
+        //limpo a tela
+        al_clear_to_color(al_map_rgb(0,0,0));
+        //desenho o bouncer nas novas posicoes x e y
+        al_draw_bitmap(bouncer, bouncer_x, bouncer_y, 0);
+
+        collision_on_going = 0;
+        for(i=0; i<NUM_STREETS; i++) {
+                buses_x[i] += buses_dx[i];
+                if(buses_x[i] > SCREEN_W)
+                        buses_x[i] = 0;
+
+                al_draw_bitmap(buses[i], buses_x[i], buses_y[i], 0);
+        }
+
+
+        ///////////////
+        al_flip_display();
+        al_rest(0.3);
 
         //procedimentos de fim de jogo (fecha a tela, limpa a memoria, etc)
 

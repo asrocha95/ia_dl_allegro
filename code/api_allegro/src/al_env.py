@@ -22,13 +22,12 @@ else:
 
 SCREEN_W = 640;    # largura tela
 SCREEN_H = 480;    # altura tela
-LOCATE_WIN_WITH_IMG = "frog_locate_window.png"
+LOCATE_WIN_WITH_IMG = "frog_locate_window.png" # Arquivo usado para localizar a janela na tela usando PILLOW
 AGENT_FPS = 10
 
 class al_env:
 	def __init__(self,game='frogger',path='..'+ bar + '..'+ bar + 'frogger',
-		locate_on_screen=None,box_height=None,box_width=None,adjust_top=0,adjust_left=0,
-		start=False):
+		locate_on_screen=None,box_height=None,box_width=None,adjust_top=0,adjust_left=0):
 		
 		if platform.system() == "Windows":
 		    self.bar = '\\'
@@ -71,23 +70,6 @@ class al_env:
 
 		# Se desloca para a pasta do programa
 		# os.chdir(path+bar)
-
-		if start:
-			self.start()
-			while not self.done:
-			    if self.data.keyboard:
-			        a = randint(0,self.num_actions)-1
-			        _ , r, d = self.step(a)
-			        print(r)
-			        
-			# output = self.control.process.stdout.readline()
-			# print(len(output))
-		# 	        # if a != 'escape':
-		# 	        #     print("Pressed:", a) 
-		# 	        #     ag.press(a)
-		# 	        # else:
-		# 	        #     print('pause') 
-		# 	        # self.capture.print()
 
 	def start(self):
 		self.reward=0

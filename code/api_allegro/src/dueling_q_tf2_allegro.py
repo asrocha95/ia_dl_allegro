@@ -11,10 +11,10 @@ from al_env import al_env
 
 STORE_PATH = './my_model/'
 MAX_EPSILON = 1
-MIN_EPSILON = 0.1
-EPSILON_MIN_ITER = 20000
-MAX_MEMORY_SIZE = 500000
-GAMMA = 0.95
+MIN_EPSILON = 0.05
+EPSILON_MIN_ITER = 50000
+MAX_MEMORY_SIZE = 50000
+GAMMA = 0.99
 BATCH_SIZE = 32
 TAU = 0.08
 POST_PROCESS_IMAGE_SIZE = (84, 84, 1)
@@ -22,10 +22,11 @@ PRE_PROCESS_IMAGE_SIZE = (84, 84)
 ORIGINAL_IMAGE_SIZE = (480,640)
 DELAY_TRAINING = 5000
 NUM_FRAMES = 4
-GIF_RECORDING_FREQ = 100
+GIF_RECORDING_FREQ = 200
+HARD_COPY = True
+HARD_UPDATE_FREQ = 10000
 
-# env = gym.make("SpaceInvaders-v0")
-# num_actions = env.action_space.n
+NUM_EPISODES = 1000000
 
 env = al_env()
 num_actions = env.num_actions
@@ -65,11 +66,15 @@ class DQModel(keras.Model):
 primary_network = DQModel(256, num_actions, True)
 target_network = DQModel(256, num_actions, True)
 primary_network.compile(optimizer=keras.optimizers.Adam(), loss='mse')
+
 # make target_network = primary_network
 for t, e in zip(target_network.trainable_variables, primary_network.trainable_variables):
     t.assign(e)
 
 primary_network.compile(optimizer=keras.optimizers.Adam(), loss=tf.keras.losses.Huber())
+
+# primary_network.load_weights(STORE_PATH+"/pretrained_primary_weights.h5")
+# target_network.load_weights(STORE_PATH+"/pretrained_target_weights.h5")
 
 class Memory:
     def __init__(self, max_memory):
@@ -128,10 +133,20 @@ def choose_action(state, primary_network, eps, step):
                                                            POST_PROCESS_IMAGE_SIZE[1], NUM_FRAMES)).numpy()))
 
 
-def update_network(primary_network, target_network):
+def update_network(primary_network, target_network,steps=None):
     # update target network parameters slowly from primary network
     for t, e in zip(target_network.trainable_variables, primary_network.trainable_variables):
-        t.assign(t * (1 - TAU) + e * TAU)
+        if not HARD_COPY:
+            # Soft Update
+            t.assign(t * (1 - TAU) + e * TAU)
+        elif steps%HARD_UPDATE_FREQ == 0:
+                # Hard Update - Cannot be as frequent
+                t.assign(e)  
+
+
+def save_networks(primary_network,target_network):
+    primary_network.save_weights(STORE_PATH+"/pretrained_primary_weights.h5")
+    target_network.save_weights(STORE_PATH+"/pretrained_target_weights.h5")
 
 
 def process_state_stack(state_stack, state):
@@ -143,9 +158,9 @@ def process_state_stack(state_stack, state):
 
 def record_gif(frame_list, episode, fps=5,best=False):
 	if best:
-		imageio.mimsave(STORE_PATH + '/recorded_episodes/' + f"/FROGGER_BEST_EPISODE-{episode}.gif", frame_list, fps=fps) #duration=duration_per_frame)
+		imageio.mimsave(STORE_PATH + '/recorded_episodes/' + f"/FROGGER_BEST_EPISODE-{episode}.gif", frame_list, fps=fps)
 	else:
-		imageio.mimsave(STORE_PATH + '/recorded_episodes/' + f"/FROGGER_EPISODE-{episode}.gif", frame_list, fps=fps) #duration=duration_per_frame)
+		imageio.mimsave(STORE_PATH + '/recorded_episodes/' + f"/FROGGER_EPISODE-{episode}.gif", frame_list, fps=fps)
 
 
 def train(primary_network, memory, target_network=None):
@@ -169,18 +184,24 @@ def train(primary_network, memory, target_network=None):
     loss = primary_network.train_on_batch(states, target_q)
     return loss
 
-num_episodes = 1000000
 eps = MAX_EPSILON
 # render = False
 if os.path.exists(STORE_PATH):
 	shutil.rmtree(STORE_PATH)
+	os.makedirs(STORE_PATH)
+
+if not os.path.exists(STORE_PATH + '/recorded_episodes/'):
+	os.makedirs(STORE_PATH + '/recorded_episodes/')
+
 	
 train_writer = tf.summary.create_file_writer(STORE_PATH + f"/DuelingQSI_{dt.datetime.now().strftime('%d%m%Y%H%M')}")
 double_q = True
 steps = 0
-max_tot_rewaed = 0
+max_tot_reward = 0
+tot_reward_hist = []
 
-for i in range(num_episodes):
+
+for i in range(NUM_EPISODES):
     state = env.reset()
     state = image_preprocess(state)
     state_stack = tf.Variable(np.repeat(state.numpy(), NUM_FRAMES).reshape((POST_PROCESS_IMAGE_SIZE[0],
@@ -195,13 +216,10 @@ for i in range(num_episodes):
     frame_list.append(tf.cast(tf.image.resize(state, ORIGINAL_IMAGE_SIZE), tf.uint8).numpy())
 
     while True:
-        # if render:
-        #     env.render()
         action = choose_action(state_stack, primary_network, eps, steps)
         next_state, reward, done = env.step(action)
         tot_reward += reward
-        # if i % GIF_RECORDING_FREQ == 0:
-        #     
+
         frame_list.append(tf.cast(tf.image.resize(next_state, ORIGINAL_IMAGE_SIZE), tf.uint8).numpy())
         
         next_state = image_preprocess(next_state)
@@ -211,7 +229,8 @@ for i in range(num_episodes):
 
         if steps > DELAY_TRAINING:
             loss = train(primary_network, memory, target_network if double_q else None)
-            update_network(primary_network, target_network)
+            update_network(primary_network, target_network, steps)
+            np.array(tot_reward_hist).tofile(STORE_PATH + '/tot_reward_hist.csv',sep=',',format='%.2f')
         else:
             loss = -1
         avg_loss += loss
@@ -219,12 +238,14 @@ for i in range(num_episodes):
         # linearly decay the eps value
         if steps > DELAY_TRAINING:
             eps = MAX_EPSILON - ((steps - DELAY_TRAINING) / EPSILON_MIN_ITER) * \
-                  (MAX_EPSILON - MIN_EPSILON) if steps < EPSILON_MIN_ITER else \
+                  (MAX_EPSILON - MIN_EPSILON) if steps < EPSILON_MIN_ITER+DELAY_TRAINING else \
                 MIN_EPSILON
         steps += 1
 
         if done:
             if steps > DELAY_TRAINING:
+                if i%100 == 0:
+                    save_networks(primary_network, target_network)
                 avg_loss /= cnt
                 print(f"Episode: {i}, Reward: {tot_reward:.2f}, avg loss: {avg_loss:.5f}, eps: {eps:.3f}, total steps: {steps}")
                 with train_writer.as_default():
@@ -234,9 +255,13 @@ for i in range(num_episodes):
                 print(f"Pre-training...Episode: {i}, Reward: {tot_reward:.2f}, total steps: {steps}")
             if i % GIF_RECORDING_FREQ == 0:
                 record_gif(frame_list, i)
-            if tot_reward > max_tot_rewaed:
-            	max_tot_rewaed=tot_reward
+            if tot_reward > max_tot_reward:
+            	max_tot_reward=tot_reward
             	record_gif(frame_list,i,best=True)
+
+            tot_reward_hist.append(tot_reward)
             break
 
         cnt += 1
+
+
