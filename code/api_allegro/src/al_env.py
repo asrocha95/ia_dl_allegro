@@ -71,6 +71,26 @@ class al_env:
 		# Se desloca para a pasta do programa
 		# os.chdir(path+bar)
 
+	def get_reward_frogger(self):
+		# Calculates Reward
+		# Tracks the position of the agent
+		if action=='w':
+			self.position+=1
+			self.reward = 1
+		elif action=='s' and self.position>0:
+			self.position-=1
+			self.reward = -1
+		else:
+			self.reward = -0.05
+
+		if self.done:
+			output = self.control.process.stdout.readline()
+			if len(output) > 0: # Frogger
+				self.reward = -1
+				# pass
+			else:
+				self.reward=10
+
 	def start(self):
 		self.reward=0
 		self.position=0
@@ -107,26 +127,7 @@ class al_env:
 			self.control.window.isActive = ag.locateOnScreen(self.locate_on_screen) is not None
 
 		self.done = not self.control.window.isActive
+
+		self.get_reward_frogger()
 		
-		# Calculates Reward
-		# Tracks the position of the agent
-		if action=='w':
-			self.position+=1
-			self.reward = 1
-		elif action=='s' and self.position>0:
-			self.position-=1
-			self.reward = -1
-		else:
-			self.reward = -0.05
-
-
-		if self.done:
-			output = self.control.process.stdout.readline()
-			if len(output) > 0: # Frogger
-				self.reward = -1
-				# pass
-			else:
-				self.reward=10
-		
-
 		return obs, self.reward, self.done

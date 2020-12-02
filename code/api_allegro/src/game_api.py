@@ -106,10 +106,6 @@ class window_for_mac:
 		self.width = box_width if box_width is not None else self.box_region.width
 		self.height = box_height
 
-	
-		
-		
-
 # Identificador
 class finder:
 	keyboard = False
