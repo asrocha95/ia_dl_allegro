@@ -1,0 +1,27 @@
+% ----------------------------------------------------------
+% Contextualização em Humanidades
+% ----------------------------------------------------------
+\chapter{Conclusões}
+\label{chap:conclusoes}
+% ----------------------------------------------------------
+
+A inteligência artificial e o aprendizado de máquina são ferramentas muito poderosas e com inúmeras aplicações práticas. A IA busca fornecer softwares que sejam capazes de realizar atividades como seres humanos para automatizar e otimizar o trabalho de rotina. Diante do grande potencial da IA, além do crescimento exponencial de pesquisa que a área vêm sofrendo, grandes empresas no mercado estão investindo na tecnologia, seja para propor novos serviços ou aprimorar produtos existentes e garantir uma vantagem competitiva no mercado.
+Situações do mundo real são muitas vezes complexas e apresentam problemas com um número muito grande de variáveis, o que dificulta a solução utilizando algoritmos de otimização tradicionais. Nesse contexto, treinar um agente em jogos digitais para superar os jogadores humanos e otimizar sua pontuação pode nos ensinar como otimizar processos variados com múltiplas aplicações. Uma vez que se tenha uma IA que possa aprender a jogar e a otimizar estratégias para maximizar a pontuação de um jogo, pode-se facilmente implementar um jogo que simule uma situação real e aplicar o sistema para que este encontre a melhor resposta ou solução para um dado problema. 
+
+Com isso em mente, foi implementada uma \textit{Deep Q Network} com o objetivo de treinar um agente capaz de aprender e desenvolver estratégias para jogar jogos digitais a partir de capturas de tela obtidas em tempo real. Para extrair as informações necessárias do jogo foi implementado um \textit{Allegro Learning Enviroment}, que tem como base a ferramenta implementada por \cite{silva:amb-jd-allegro}, modificada para conter funcionalidades semelhantes ao emulador de Atari 2600 \cite{brockman2016openai}.
+
+Os resultados obtidos, apesar de limitados, são promissores. O agente foi capaz de alcançar uma política claramente superior à uma abordagem aleatória. Com isso, dado um ambiente de treinamento mais propício, com hardware mais apropriado para executar algoritmos de \textit{machine learning} e com um tempo de execução maior, espera-se que a rede eventualmente seja capaz de alcançar resultados equivalentes ou até superiores aos obtidos por um ser humano. Outro fator a se considerar é o fato de que, apesar de o sistema implementado ter sido testado somente em um ambiente, em teoria o mesmo sistema pode ser aplicado para outros jogos sem a necessidade de grandes alterações. 
+
+A maior limitação do sistema implementado se encontra na comunicação entre o jogo e o ALE. Em um cenário ideal, seria desejado uma comunicação em tempo real entre a ALE, em \textit{Python}, e o programa, em C. Apesar de ter sido encontrado soluções para muitos dos problemas causados por essa interação, essas soluções deixam espaço para erro e tendem a aumentar o custo computacional do algoritmo. Outra grande desvantagem do sistema é a necessidade de renderizar as imagens para extrair os dados de observação do instante atual do jogo. Essa limitação resulta em um tempo de treinamento muito maior quando comparado à redes neurais treinadas para jogos Atari 2600 que utilizam um emulador em \textit{Python} \cite{brockman2016openai}.
+
+\section{Proposta de Continuidade} % (fold)
+\label{sec:proposta_de_continuidade}
+
+O sistema implementado e a análise dos resultados obtidos fornecem algumas possibilidades de aprimoramento do sistema e aplicação em novos cenários. A principal proposta de continuidade se encontra na execução do sistema em períodos longos de tempo para analisar os resultados obtidos por uma rede treinada propriamente após pelo menos 1 milhão de episódios. Somente com uma rede extensamente treinada será possível analisar com precisão o potencial do sistema.
+
+Com a ideia de aprimorar o sistema atual, a maior potencial para tal se encontra no desenvolvimento de uma comunicação em tempo real entre o jogo em C e o ALE. Caso implementado, um sistema com essas características seria capaz de otimizar o processo de treinamento, reduzindo a margem para erros e possibilitando um sistema mais genérico. Além disso, potencialmente poderia-se implementar uma transmissão dos dados de estado entre o jogo e o agente sem a necessidade da renderização das imagens para cada instante de tempo, o que reduziria consideravelmente o tempo de execução do algoritmo.
+
+Por fim, propõe-se aplicar o sistema implementado para diferentes jogos, com mecânicas distintas, de forma a analisar o potencial de aplicação do mesmo em cenários variados.
+
+% section proposta_de_continuidade (end)
+
